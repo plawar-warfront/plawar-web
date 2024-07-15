@@ -24,7 +24,7 @@ getChainOptions().then((chainOptions) => {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<App />} />
+            <Route path="/plawar-web" element={<App />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
