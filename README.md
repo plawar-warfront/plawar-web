@@ -1,4 +1,5 @@
 
-# XPLA Event
+# XPLA Plawar
 
-Get ready to explore the XPLA EVENT! Link your wallet and start the experience now!
+npm install
+npm run start
