@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.css": "/plawar-web/static/css/main.b94b5825.css",
+    "main.js": "/plawar-web/static/js/main.4b9d0aca.js",
+    "static/js/27.b74831fa.chunk.js": "/plawar-web/static/js/27.b74831fa.chunk.js",
+    "index.html": "/plawar-web/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.b94b5825.css",
+    "static/js/main.4b9d0aca.js"
+  ]
+}
