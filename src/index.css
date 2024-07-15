@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Sora:wght@100;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Sora:wght@100;500;700&display=swap');
+
+.font-sora-500 {
+  font-family: 'Sora';
+  font-weight: 500;
+}
+
+.font-sora-700 {
+  font-family: 'Sora';
+  font-weight: 700;
+}
+
+.text-gradient span {
+  background: linear-gradient(to right, #00AAFF, #FFFFFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+.font-pretendard {
+  font-family: 'Pretendard-Regular';
+}
+
+.main-shadow {
+  filter: drop-shadow(70px 60px 50px rgba(0, 0, 0, 0.05));
+}
+
+.blur-text {
+  background: rgba(255, 255, 255, 0.60);
+  backdrop-filter: blur(10px);
+}
+
+.modal-bg {
+  filter: drop-shadow(70px 60px 50px rgba(0, 0, 0, 0.05));
+  backdrop-filter: blur(10px);
+  box-shadow: 20px 25px 70px 0px #00000033;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Press+Start+2P&family=Sora:wght@100;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Press+Start+2P&family=Sora:wght@100;500;700&display=swap');
+.font-inter-600 {
+  font-family: 'inter';
+  font-weight: 600;
+}
+.font-inter-400 {
+  font-family: 'inter';
+  font-weight: 400;
+}
+
+.beauty-scroll::-webkit-scrollbar {
+  width: 10px; 
+}
+.beauty-scroll::-webkit-scrollbar-thumb {
+  height: 30%; 
+  background: #D9D9D9;
+  border-radius: 100px;
+}

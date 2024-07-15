@@ -1,0 +1,76 @@
+{
+  "homepage": "https://plawar-warfront.github.io/plawar-web",
+  "name": "plawar",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.19",
+    "@mui/material": "^5.14.20",
+    "@tanstack/react-query": "^5.13.4",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.68",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@xpla.kitchen/utils": "^0.2.2",
+    "@xpla/wallet-provider": "^1.0.0",
+    "@xpla/xpla.js": "^1.0.0",
+    "assert": "^2.1.0",
+    "bech32": "^2.0.0",
+    "bignumber.js": "^9.1.2",
+    "buffer": "^6.0.3",
+    "clsx": "^2.0.0",
+    "crypto-browserify": "^3.12.0",
+    "ethereumjs-util": "^7.1.5",
+    "gh-pages": "^6.1.0",
+    "patch-package": "^8.0.0",
+    "process": "^0.11.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "react-scripts": "5.0.1",
+    "socket.io-client": "^4.7.5",
+    "stream-browserify": "^3.0.0",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4",
+    "zustand": "^4.5.2"
+  },
+  "scripts": {
+    "postinstall": "patch-package",
+    "start": "set PORT=3452 && react-app-rewired start",
+    "build": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/socket.io-client": "^3.0.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "react-app-rewired": "^2.2.1",
+    "tailwindcss": "^3.3.6"
+  }
+}

@@ -1,0 +1,172 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #000;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 20px;
+  border-bottom: 1px solid white;
+}
+
+
+.tooltip {
+  background-color: rgba(255, 255, 255, 0.50);
+  color: white;
+  text-align: center;
+  min-width: 270px;
+  min-height: 110px;
+  padding: 20px 24px;
+  font-weight: 400;
+  line-height: normal;
+  position: absolute;
+  z-index: 1;
+  top: calc(100% + 8px);
+  transform: translate(-50%, 0);
+  left: 50%;
+  -webkit-animation: fadeIn 0.2s ease-in-out;
+  animation: fadeIn 0.2s ease-in-out;
+  border-radius: 18px;
+  filter: drop-shadow(8px 8px 20px #808183);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  content: '';
+  fill: rgba(255, 255, 255, 0.50);
+}
+
+.tooltip:before {
+  position: absolute;
+  z-index: -1;
+
+  content: '';
+
+  width: 12px;
+  height: 8px;
+
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: rgba(142, 142, 142, 1);
+  top: -7px;
+  -webkit-clip-path: polygon(0 100%, 100% 100%, 50% 0);
+  clip-path: polygon(0 100%, 100% 100%, 50% 0);
+
+}
+
+@media screen and (min-width : 768px) {
+
+  .tooltip {
+    background-color: #808183;
+    color: white;
+    text-align: center;
+    min-width: 327px;
+    min-height: 138px;
+    padding: 20px 24px;
+    font-weight: 400;
+    line-height: normal;
+    position: absolute;
+    z-index: 1;
+    top: calc(100% + 8px);
+    transform: translate(-50%, 0);
+    left: 50%;
+    -webkit-animation: fadeIn 0.2s ease-in-out;
+    animation: fadeIn 0.2s ease-in-out;
+    border-radius: 18px;
+    filter: none;
+  }
+
+  .tooltip:before {
+    position: absolute;
+    z-index: -1;
+
+    content: '';
+
+    width: 20px;
+    height: 15px;
+
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: #808183;
+    top: -8px;
+    -webkit-clip-path: polygon(0 100%, 100% 100%, 50% 0);
+    clip-path: polygon(0 100%, 100% 100%, 50% 0);
+  }
+}
+
+@-webkit-keyframes fadeIn {
+
+  0% {
+
+    opacity: 0;
+
+    transform: scale(0.6);
+
+  }
+
+  100% {
+    opacity: 100%;
+    transform: scale(1);
+  }
+
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 100%;
+  }
+}
+
+
+.fadeOut {
+  animation: fadeout 500ms;
+  -moz-animation: fadeout 500ms; /* Firefox */
+  -webkit-animation: fadeout 500ms; /* Safari and Chrome */
+  -o-animation: fadeout 500ms; /* Opera */
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeout {
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
+  }
+}
+@-moz-keyframes fadeout { /* Firefox */
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
+  }
+}
+@-webkit-keyframes fadeout { /* Safari and Chrome */
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
+  }
+}
+@-o-keyframes fadeout { /* Opera */
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
+  }
+}
+
+@media screen and (max-width : 768px) {
+  .connectwalletshadow {
+    box-shadow: 10px 5px 10px 0px #000000A6;
+  }
+}

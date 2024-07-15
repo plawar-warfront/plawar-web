@@ -1,0 +1,14 @@
+diff --git a/node_modules/@xpla/wallet-controller/modules/walletconnect/modal.js b/node_modules/@xpla/wallet-controller/modules/walletconnect/modal.js
+index eec180e..1bb16d1 100644
+--- a/node_modules/@xpla/wallet-controller/modules/walletconnect/modal.js
++++ b/node_modules/@xpla/wallet-controller/modules/walletconnect/modal.js
+@@ -23,7 +23,8 @@ export class XplaWalletconnectQrcodeModal {
+             const query = encodeURIComponent(`action=wallet_connect&payload=${encodeURI}`);
+             const walletSchemeUri = {
+                 [WalletApp.XPLA_VAULT]: `https://xplavault.page.link/?link=https://www.xpla.io?${query}&apn=xpla.android&isi=1640593143&ibi=xpla.ios`,
+-                [WalletApp.XPLA_GAMES]: `https://c2xvault.page.link/?link=https://www.xpla.games?${query}&apn=c2xvault.android&isi=1642858297&ibi=c2xvault.ios`,
++                [WalletApp.XPLA_GAMES]: `https://c2xvault.page.link/?link=https://www.c2x.world?${query}&apn=c2xvault.android&isi=1642858297&ibi=c2xvault.ios`,
++                // [WalletApp.XPLA_GAMES]: `https://c2xvault.page.link/?link=https://www.xpla.games?${query}&apn=c2xvault.android&isi=1642858297&ibi=c2xvault.ios`,
+                 [WalletApp.XPLAYZ]: `https://xplayz.page.link/?link=https://www.zenaad.com?${query}&apn=com.zenaad.xplayz&isi=1524577064&ibi=com.zenaad.xplayz`,
+             };
+             let schemeUri = '';
