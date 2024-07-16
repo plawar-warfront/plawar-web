@@ -16,9 +16,6 @@ const Chat: React.FC = () => {
   const [chat, setChat] = useState<ChatMessage[]>([]);
 
   const { wallets } = useWallet();
-  // const wallets = [{
-  //   xplaAddress: 'xpla1338rkvwhg6zsmettdz4nt0yd6u3krkf2tz9nah'
-  // }]
 
   useEffect(() => {
     socket.emit('get chat history');
@@ -27,8 +24,6 @@ const Chat: React.FC = () => {
       setChat((prevChat) => [...prevChat, msg]);
     }
     const onChatHistory = (history: ChatMessage[]) => {
-      console.log('history', history);
-      console.log('history');
       setChat(history);
     }
 
@@ -79,6 +74,7 @@ const Chat: React.FC = () => {
               value={state.message}
               variant="outlined"
               label="Message"
+              required
             />
           </div>
           <button className="border">보내기</button>
