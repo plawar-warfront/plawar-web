@@ -1,6 +1,6 @@
 import "./App.css";
 import Connect from "./components/Connect";
-import Chat from "./Chat";
+import Chat from "./components/Chat";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
 
 function App() {
