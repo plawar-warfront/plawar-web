@@ -13,11 +13,14 @@ interface ChatMessage {
 const Chat: React.FC = () => {
   const [state, setState] = useState<{ message: string; }>({ message: '' });
   const [chat, setChat] = useState<ChatMessage[]>([]);
-
   const socket = io(process.env.REACT_APP_ENV !== "development" ? process.env.REACT_APP_API_URL || '' : 'http://localhost:5641/',  process.env.REACT_APP_ENV !== "development" ? {
     path : '/discord/socket.io'
   } : undefined);
-  const { status, wallets } = useWallet();
+
+  // const { status, wallets } = useWallet();
+  const wallets = [{
+    xplaAddress : 'xpla1338rkvwhg6zsmettdz4nt0yd6u3krkf2tz9nah'
+  }]
 
   useEffect(() => {
     socket.on('message', (msg: ChatMessage) => {

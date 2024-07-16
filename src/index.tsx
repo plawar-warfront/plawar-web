@@ -11,6 +11,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import SimpleChat from "./SimpleChat";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const queryClient = new QueryClient()
@@ -25,6 +26,7 @@ getChainOptions().then((chainOptions) => {
         <BrowserRouter>
           <Routes>
             <Route path="/plawar-web" element={<App />} />
+            <Route path="/chat" element={<SimpleChat />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
