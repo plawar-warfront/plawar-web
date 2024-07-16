@@ -1,36 +1,45 @@
 // src/App.tsx
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import io from 'socket.io-client';
 import './App.css';
 import { TextField } from '@mui/material';
 import { useWallet } from '@xpla/wallet-provider';
+import { socket } from './socket';
 
 interface ChatMessage {
   address: string;
   message: string;
 }
 
+
 const Chat: React.FC = () => {
   const [state, setState] = useState<{ message: string; }>({ message: '' });
   const [chat, setChat] = useState<ChatMessage[]>([]);
-  const socket = io(process.env.REACT_APP_ENV !== "development" ? process.env.REACT_APP_API_URL || '' : 'http://localhost:5641/',  process.env.REACT_APP_ENV !== "development" ? {
-    path : '/discord/socket.io'
-  } : undefined);
 
-  // const { status, wallets } = useWallet();
-  const wallets = [{
-    xplaAddress : 'xpla1338rkvwhg6zsmettdz4nt0yd6u3krkf2tz9nah'
-  }]
+  const { wallets } = useWallet();
+  // const wallets = [{
+  //   xplaAddress: 'xpla1338rkvwhg6zsmettdz4nt0yd6u3krkf2tz9nah'
+  // }]
 
   useEffect(() => {
-    socket.on('message', (msg: ChatMessage) => {
-      setChat((prevChat) => [...prevChat, msg]);
-    });
+    socket.emit('get chat history');
 
-    socket.on('chat history', (history: ChatMessage[]) => {
-      console.log(history)
+    const onMessage = (msg: ChatMessage) => {
+      setChat((prevChat) => [...prevChat, msg]);
+    }
+    const onChatHistory = (history: ChatMessage[]) => {
+      console.log('history', history);
+      console.log('history');
       setChat(history);
-    });
+    }
+
+    socket.on('message', onMessage);
+    socket.on('chat history', onChatHistory);
+
+    return () => {
+      socket.off('message', onMessage);
+      socket.off('chat history', onChatHistory);
+    }
+
   }, []);
 
   const onTextChange = (e: ChangeEvent<HTMLInputElement>) => {

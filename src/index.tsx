@@ -26,7 +26,7 @@ getChainOptions().then((chainOptions) => {
         <BrowserRouter>
           <Routes>
             <Route path="/plawar-web" element={<App />} />
-            <Route path="/chat" element={<SimpleChat />} />
+            {/* <Route path="/chat" element={<SimpleChat />} /> */}
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
