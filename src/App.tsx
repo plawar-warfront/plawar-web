@@ -2,12 +2,10 @@ import "./App.css";
 import Connect from "./components/Connect";
 import Chat from "./components/Chat";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
-import ParticipateForm from "./components/ParticipateForm";
 import Game from "./components/Game";
 
 function App() {
-  const { status, wallets } =
-    useWallet();
+  const { status, wallets } = useWallet();
   return (
     <div className="App min-h-screen ">
       <header className="App-header">
@@ -17,10 +15,7 @@ function App() {
         </div>
       </header>
       <div className="flex h-[calc(100vh-80px)]">
-        <div className="flex flex-col flex-1">
           <Game />
-          <ParticipateForm />
-        </div>
         <div className="flex justify-end items-center h-full">
           {status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 ?
             <Chat />

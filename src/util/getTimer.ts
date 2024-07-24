@@ -1,4 +1,4 @@
-const getTimer = (warMin: number, truceMin: number, startTime: string) => {
+const getWarTime = (warMin: number, truceMin: number, startTime: string) => {
     const [yearMonthDate, time] = startTime.split(' ');
     const [year, month, date] = yearMonthDate.split('-');
     const [hour, minute, second] = time.split(':');
@@ -11,5 +11,5 @@ const getTimer = (warMin: number, truceMin: number, startTime: string) => {
     const remainder =  Math.floor(secDiff % (round_min * 60));
     return remainder;
 }
-export default getTimer;
+export default getWarTime;
 

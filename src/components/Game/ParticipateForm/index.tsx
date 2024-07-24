@@ -2,7 +2,7 @@ import { useConnectedWallet } from '@xpla/wallet-provider';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { TextField } from '@mui/material';
-import { lcd } from '../../lcd';
+import { lcd } from '../../../lcd';
 
 const ParticipateForm = () => {
     const [balance, setBalance] = useState<string | null>();
