@@ -21,6 +21,7 @@ export default function Connect() {
   useEffect(() => {
     if (status === WalletStatus.WALLET_CONNECTED && wallets.length > 0) {
       setInterval(() => {
+        console.log('refetch');
         refetchStates()
       }, 50 * 1000)
     }

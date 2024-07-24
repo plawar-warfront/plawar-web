@@ -9,7 +9,7 @@ import useGetUserAmount from "../../useQuery/useGetUserAmount";
 import useGetTeamAddress from "../../useQuery/useGetTeamAddress";
 import useGetParticipateRound from "../../useQuery/useGetPariticpateRound";
 import useGetClaimedRound from "../../useQuery/useGetClaimedRound";
-import getWarTime from "../../util/getTimer";
+import getWarTime from "../../util/getWarTime";
 import ParticipateForm from "./ParticipateForm";
 
 const Game = () => {
@@ -24,21 +24,27 @@ const Game = () => {
       {
         config && <GameInfo config={config} />
       }
+      ---<br />
       {
         nowRound && <RoundInfo round={nowRound} />
       }
+      ---<br />
       {
         status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 && nowRound &&
         <UserParticipateInfo address={wallets[0].xplaAddress} round={nowRound} />
       }
+      ---<br />
       {
         claimedRound && <div>
           클레임한 라운드 : [{claimedRound.toString()}]
         </div>
       }
+      ---<br />
     </div>
     {
-      config &&   <ParticipateForm config={config} />
+      config && <ParticipateForm config={config}
+        address={status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 ? wallets[0].xplaAddress : undefined}
+      />
     }
   </div>
 }

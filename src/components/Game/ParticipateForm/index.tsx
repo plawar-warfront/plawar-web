@@ -1,103 +1,116 @@
-import { useConnectedWallet } from '@xpla/wallet-provider';
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import BigNumber from 'bignumber.js';
+import React, { ChangeEvent, FormEvent,  useState } from 'react';
 import { TextField } from '@mui/material';
-import { lcd } from '../../../lcd';
 import { Config } from '../../../useQuery/useConfig';
-import getWarTime from '../../../util/getTimer';
+import getWarTime from '../../../util/getWarTime';
 import { useTimer } from 'react-timer-hook';
 import clsx from 'clsx';
+import useParticipateGame from '../../../useMutation/useParticipateGame';
+import useUserBalance from '../../../useQuery/useUserBalance';
+import { plawarContractOwner } from '../../../constant';
+import RegisterPrize from './RegisterPrize';
 
-const ParticipateForm = ({ config }: { config: Config }) => {
-    const [balance, setBalance] = useState<string | null>();
-    const connectedWallet = useConnectedWallet();
+const ParticipateForm = ({ config, address }: { config: Config, address?: string }) => {
     const [userInput, setUserInput] = useState<{ amount: number; }>({ amount: 10 });
 
     const warTime = getWarTime(config.war_min, config.truce_min, config.start_time);
     const [nowWar, setNowWar] = useState(warTime < config.war_min * 60);
 
-    useEffect(() => {
-        if (connectedWallet) {
-            lcd.bank.balance(connectedWallet.walletAddress).then(([coins]) => {
-                const coinbalance = JSON.parse(coins.toJSON()).filter((c: { amount: string; denom: string; }) => c.denom === 'axpla');
-                if (coinbalance.length === 1) {
-                    const xplaBalance = new BigNumber(coinbalance[0].amount).dividedBy(10 ** 18).toFixed(2);
-                    setBalance(xplaBalance);
-                } else {
-                    setBalance('0');
-                }
-            });
-        } else {
-            setBalance(null);
-        }
-    }, [connectedWallet]);
+    const [requestError, setRequestError] = useState<string | null>(null);
+    const [txhash, setTxhash] = useState<string | null>(null);
+
 
     const onAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUserInput({ ...userInput, [e.target.name]: e.target.value });
     };
 
+    const { mutateAsync: participateGame } = useParticipateGame(config);
+
     const onButtonClick = async (e: FormEvent, team: string) => {
         e.preventDefault();
         const { amount } = userInput;
-        console.log(amount, team)
-        // socket.emit('message', { address: wallets[0].xplaAddress, message });
-
-
-        // try {
-        //     const tx = await connectedWallet?.post({
-        //       msgs: [
-        //         new MsgSend(
-        //           connectedWallet.walletAddress,
-        //           "xpla1uywstydn25neas7e4f4ahnesmhv7e2y9nqfqql",
-        //           {
-        //             axpla: "1" + "000000" + "000000" + "000000",
-        //           }
-        //         ),
-        //       ],
-        //     });
-
-        //     if (tx?.result.txhash) {
-
-        //     }
-        //   } catch (e) {
-        //     alert(
-        //       "Tx Error! Maybe no xpla or sequence mismatch.. Please Retry!"
-        //     );
-        //   }
+        try {
+            if (!address) {
+                throw new Error("Please connect wallet");
+            }
+            const txhash = await participateGame({
+                team,
+                amount
+            });
+            if (txhash) {
+                setTxhash(txhash);
+                setRequestError(null);
+            } else {
+                throw new Error("There is no txhash.");
+            }
+        } catch (e) {
+            setRequestError(
+                `${e instanceof Error ? e.message : String(e)}`
+            );
+            setTxhash(null);
+        }
         setUserInput({ amount: 10 });
     };
 
-    return <form className="flex justify-center items-center py-[32px] gap-[30px]">
-        <TeamButton
-            nowWar={nowWar}
-            setNowWar={setNowWar}
-            initialSeconds={nowWar ? (config.war_min * 60 - warTime) : (config.war_min + config.truce_min) * 60 - warTime}
-            team={"blue"}
-            onButtonClick={onButtonClick}
-        />
-        <div>
-            내 잔액 : {balance} <br />
-            <TextField
-                type="number"
-                name="amount"
-                onChange={onAmountChange}
-                InputProps={{ inputProps: { min: 0 } }}
-                value={userInput.amount}
-                variant="outlined"
-                label="Amount"
-                required
+    return <div className="flex flex-col items-center">
+        {
+            address === plawarContractOwner && <RegisterPrize />
+        }
+        <form className="flex justify-center items-center py-[32px] gap-[30px]">
+            <TeamButton
+                nowWar={nowWar}
+                setNowWar={setNowWar}
+                initialSeconds={nowWar ? (config.war_min * 60 - warTime) : (config.war_min + config.truce_min) * 60 - warTime}
+                team={"blue"}
+                onButtonClick={onButtonClick}
             />
+            <div>
+                {address && <Balance
+                    address={address} />}
+                <br />
+                <TextField
+                    type="number"
+                    name="amount"
+                    onChange={onAmountChange}
+                    InputProps={{ inputProps: { min: 0 } }}
+                    value={userInput.amount}
+                    variant="outlined"
+                    label="Amount"
+                    required
+                />
+            </div>
+            <TeamButton
+                nowWar={nowWar}
+                setNowWar={setNowWar}
+                initialSeconds={nowWar ? (config.war_min * 60 - warTime) : (config.war_min + config.truce_min) * 60 - warTime}
+                team={"red"}
+                onButtonClick={onButtonClick}
+            />
+        </form>
+        <div className="max-w-[600px] ">
+            {
+                txhash && <a
+                    href={`https://explorer.xpla.io/testnet/tx/${txhash}`}
+                    target="_blank"
+                    className="text-[#00B1FF] overflow-hidden whitespace-nowrap text-ellipsis w-full max-w-[210px] inline-block"
+                >
+                    {txhash}
+                </a>
+            }
+            {
+                requestError && <span className="text-[#FF3C24] font-medium text-[15px] leading-[18px] ">
+                    {requestError}
+                </span>
+            }
         </div>
-        <TeamButton
-            nowWar={nowWar}
-            setNowWar={setNowWar}
-            initialSeconds={nowWar ? (config.war_min * 60 - warTime) : (config.war_min + config.truce_min) * 60 - warTime}
-            team={"red"}
-            onButtonClick={onButtonClick}
-        />
-    </form>
+    </div>
 }
 
+const Balance = ({ address }: { address: string }) => {
+    const { data: balance } = useUserBalance(address);
+    return <>
+        내 잔액 : {balance}
+    </>
+}
 
 const TeamButton = ({ initialSeconds, nowWar, setNowWar, team, onButtonClick }: {
     initialSeconds: number;
@@ -124,16 +137,16 @@ const TeamButtonComponent = ({ expiryTimestamp, setNowWar, nowWar, team, onButto
     onButtonClick: (e: FormEvent, team: string) => Promise<void>;
 }) => {
     useTimer({ expiryTimestamp, onExpire: () => setNowWar(!nowWar) });
-    return   <button
-            disabled={nowWar === false}
-            onClick={(e) => onButtonClick(e, team)}
-            className={clsx(" text-white font-bold py-2 px-20 rounded",
-                !nowWar && "hover:cursor-not-allowed bg-opacity-50",
-                nowWar && (team === 'red' ? 'hover:bg-red-700':'hover:bg-blue-700'), 
-                team === 'red' ? 'bg-red-500 ' : 'bg-blue-500 '
-            )}>
-            Button
-        </button>
+    return <button
+        // disabled={nowWar === false}
+        onClick={(e) => onButtonClick(e, team)}
+        className={clsx(" text-white font-bold py-2 px-20 rounded",
+            // !nowWar && "hover:cursor-not-allowed bg-opacity-50",
+            // nowWar && (team === 'red' ? 'hover:bg-red-700' : 'hover:bg-blue-700'),
+            team === 'red' ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'
+        )}>
+        Button
+    </button>
 }
 
 export default ParticipateForm;
