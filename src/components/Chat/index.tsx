@@ -48,12 +48,9 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-100px)] justify-between pr-4">
-      <div className="flex flex-1 flex-col h-full render-chat ">
-        <h1>채팅 목록</h1>
-        <RenderChat chat={chat} 
-        userAddress={wallets[0].xplaAddress}/>
-      </div>
+    <div className="flex flex-col h-full justify-between mr-4 py-8">
+      <h1>채팅 목록</h1>
+      <RenderChat chat={chat}  userAddress={wallets[0].xplaAddress}/>
       <form onSubmit={onMessageSubmit} className="">
         <h1>채팅</h1>
         <div className="flex gap-2">
