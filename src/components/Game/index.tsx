@@ -11,6 +11,8 @@ import useGetParticipateRound from "../../useQuery/useGetPariticpateRound";
 import useGetClaimedRound from "../../useQuery/useGetClaimedRound";
 import getWarTime from "../../util/getWarTime";
 import ParticipateForm from "./ParticipateForm";
+import axplaToXpla from "../../util/axplaToXpla";
+import { truncate } from "@xpla.kitchen/utils";
 
 const Game = () => {
   const { data: config } = useConfig();
@@ -20,26 +22,32 @@ const Game = () => {
 
   return <div className="flex flex-1 flex-col justify-between">
     <div>
-      게임화면
+      게임정보 :
+      <br />
+      게임 컨트랙트 주소 : {plawarContractAddress}
+      <br />
+      claim 컨트랙트 주소 : {claimContractAddress}
       {
         config && <GameInfo config={config} />
       }
       ---<br />
       {
-        nowRound && <RoundInfo round={nowRound} />
+        claimedRound && <div>
+          게임에서 Vesting Register된 라운드 : [{claimedRound.toString()}]
+        </div>
       }
       ---<br />
+
+      내 정보 : <br />
       {
         status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 && nowRound &&
         <UserParticipateInfo address={wallets[0].xplaAddress} round={nowRound} />
       }
+
       ---<br />
       {
-        claimedRound && <div>
-          클레임한 라운드 : [{claimedRound.toString()}]
-        </div>
+        nowRound && <RoundInfo round={nowRound} />
       }
-      ---<br />
     </div>
     {
       config && <ParticipateForm config={config}
@@ -56,8 +64,7 @@ const GameInfo = ({ config }: { config: Config }) => {
   const [nowWar, setNowWar] = useState(warTime < config.war_min * 60);
 
   return <div>
-    게임정보
-    <br />전쟁시간 : {config.war_min}
+    전쟁시간 : {config.war_min}
     <br />휴전시간 : {config.truce_min}
     {
       nowWar ?
@@ -81,8 +88,7 @@ const GameInfo = ({ config }: { config: Config }) => {
           />
         </div>
     }
-    <br />게임 컨트랙트 주소 : {plawarContractAddress}
-    <br />claim 컨트랙트 주소 : {claimContractAddress}
+
   </div>
 }
 
@@ -91,68 +97,82 @@ const RoundInfo = ({ round }: { round: number }) => {
   const { data: redTeamParticipants } = useGetTeamAddress(round, "red");
   const { data: blueTeamParticipants } = useGetTeamAddress(round, "blue");
 
-  return <>
+  return <div className="flex flex-col justify-center items-center">
     <br />현재라운드 : {round}
-    {
-      teamAmount && <>
-        <br />
-        red팀 amount : {teamAmount.red}
-        <br />
-        blue팀 amount {teamAmount.blue}
-        <br />
-      </>
-    }
-    {
-      redTeamParticipants && <>
-        red팀 참가자수 :{redTeamParticipants.length}
-        <br />
-        참가자 :
-        [{
-          redTeamParticipants.map((redTeam) => {
-            return <div key={redTeam.address}>
-              address : {redTeam.address} <br />
-              amount : {redTeam.amount}<br />
-            </div>
-          })
-        }]
-        <br />
-      </>
-    }
-    {
-      blueTeamParticipants && <>
-        blue팀 참가자수 :{blueTeamParticipants.length}
-        <br />
-        참가자 :
+    <br />
+    <div className="flex gap-10">
+      <div className="text-blue-400">
 
-        [{
-          blueTeamParticipants.map((blueTeam) => {
-            return <div key={blueTeam.address}>
-              address : {blueTeam.address} <br />
-              amount : {blueTeam.amount}<br />
-            </div>
-          })
-        }]
-        <br />
-      </>
-    }
-  </>
+        {
+          teamAmount && <>
+            blue팀 amount : {axplaToXpla(teamAmount.blue)} <br />
+          </>
+        }
+        {
+          blueTeamParticipants && <>
+            blue팀 참가자수 :{blueTeamParticipants.length}
+            <br />
+            blue팀 참가자 :
+
+            [{
+              blueTeamParticipants.map((blueTeam) => {
+                return <div key={blueTeam.address}>
+                  address : {truncate(blueTeam.address, [5, 4])}, amount : {axplaToXpla(blueTeam.amount)} XPLA<br />
+                </div>
+              })
+            }]
+            <br />
+          </>
+        }
+      </div>
+      <div className="text-red-400">
+
+        {
+          teamAmount && <>
+            red팀 amount : {axplaToXpla(teamAmount.red)} <br />
+          </>
+        }
+        {
+          redTeamParticipants && <>
+            red팀 참가자수 :{redTeamParticipants.length}
+            <br />
+            red팀 참가자 :
+            [{
+              redTeamParticipants.map((redTeam) => {
+                return <div key={redTeam.address}>
+                  address : {truncate(redTeam.address, [5, 4])}, amount : {axplaToXpla(redTeam.amount)} XPLA<br />
+                </div>
+              })
+            }]
+            <br />
+          </>
+        }
+      </div>
+
+
+    </div>
+  </div>
 }
 
 const UserParticipateInfo = ({ address, round }: { address: string; round: number; }) => {
   const { data: userAmount } = useGetUserAmount(round, address);
   const { data: participatedRound } = useGetParticipateRound(address);
-  return <> {
-    userAmount && <>
-      myaddress : {address}<br />
-      team : {userAmount.team} <br />
-      amount : {userAmount.amount}
-      <br />
-    </>
-  }
+  return <>
+
     {
-      participatedRound && <div>
-        참가한 라운드: [{participatedRound.toString()}]
-      </div>
+      userAmount && <>
+        myaddress : {truncate(address, [5, 4])}<br />
+        {
+          participatedRound && <div>
+            참가한 라운드: [{participatedRound.toString()}]
+          </div>
+        }
+        <br />
+        이번 라운드에서 참가한 정보 <br />
+        team : {userAmount.team} <br />
+        amount : {axplaToXpla(userAmount.amount)} XPLA
+        <br />
+      </>
     }
   </>
 }

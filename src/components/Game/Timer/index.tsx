@@ -1,5 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { useTimer } from 'react-timer-hook';
+import { plawarContractAddress } from '../../../constant';
 
 interface TimerProps {
     seconds: number;
@@ -22,7 +24,15 @@ const TimerComponent = ({ expiryTimestamp, setNowWar, nowWar }: {
     expiryTimestamp: Date; nowWar: boolean;
     setNowWar: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const { totalSeconds } = useTimer({ expiryTimestamp, onExpire: () => setNowWar(!nowWar) });
+  const queryClient = useQueryClient();
+  const { totalSeconds } = useTimer({ expiryTimestamp, onExpire: async () => {
+        if (nowWar === false) {
+            await queryClient.invalidateQueries({
+                queryKey: ['nowRound', plawarContractAddress],
+              });
+        };
+        setNowWar(!nowWar);
+    }});
 
     const formatTime = (sec: number): string => {
         const m: number = Math.floor(sec / 60);

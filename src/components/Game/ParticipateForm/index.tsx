@@ -32,12 +32,12 @@ const ParticipateForm = ({ config, address }: { config: Config, address?: string
             if (!address) {
                 throw new Error("Please connect wallet");
             }
-            const txhash = await participateGame({
+            const res = await participateGame({
                 team,
                 amount
             });
-            if (txhash) {
-                setTxhash(txhash);
+            if (res) {
+                setTxhash(res.txhash);
                 setRequestError(null);
             } else {
                 throw new Error("There is no txhash.");
