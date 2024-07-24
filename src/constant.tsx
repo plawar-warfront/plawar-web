@@ -1,0 +1,4 @@
+export const plawarContractOwner = "xpla1k5f4rg0amatncw8vdxq3dqr2q27fdfqs2j5l62";
+export const claimContractOwner = "xpla1hl7v8n7mapkwyt5kfzvf6fqxprxlmgfwrfjell";
+export const plawarContractAddress = "xpla18q649fskev5g46nds3mq85wr8jyp2dt2fjuwgw7dat5ftkswxc6qw42z4u";
+export const claimContractAddress = "xpla1rf2mczuchqel8sd7vjt2gahfcg2dqrr66sxp29kj0ggfllp725rqtfhycv";
