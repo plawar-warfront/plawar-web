@@ -18,27 +18,28 @@ const Game = () => {
   const { data: claimedRound } = useGetClaimedRound();
   const { status, wallets } = useWallet();
 
-  return <div className="flex flex-1 flex-col">
-    게임화면
+  return <div className="flex flex-1 flex-col justify-between">
+    <div>
+      게임화면
+      {
+        config && <GameInfo config={config} />
+      }
+      {
+        nowRound && <RoundInfo round={nowRound} />
+      }
+      {
+        status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 && nowRound &&
+        <UserParticipateInfo address={wallets[0].xplaAddress} round={nowRound} />
+      }
+      {
+        claimedRound && <div>
+          클레임한 라운드 : [{claimedRound.toString()}]
+        </div>
+      }
+    </div>
     {
-      config && <GameInfo config={config} />
+      config &&   <ParticipateForm config={config} />
     }
-    {
-      nowRound && <RoundInfo round={nowRound} />
-    }
-    {
-      status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 && nowRound &&
-      <UserParticipateInfo address={wallets[0].xplaAddress} round={nowRound} />
-    }
-    {
-      claimedRound && <div>
-        클레임한 라운드 : [{claimedRound.toString()}]
-      </div>
-    }
-{
-  config && 
-    <ParticipateForm />
-}
   </div>
 }
 
@@ -100,14 +101,14 @@ const RoundInfo = ({ round }: { round: number }) => {
         red팀 참가자수 :{redTeamParticipants.length}
         <br />
         참가자 :
-        {
+        [{
           redTeamParticipants.map((redTeam) => {
             return <div key={redTeam.address}>
               address : {redTeam.address} <br />
               amount : {redTeam.amount}<br />
             </div>
           })
-        }
+        }]
         <br />
       </>
     }
@@ -117,14 +118,14 @@ const RoundInfo = ({ round }: { round: number }) => {
         <br />
         참가자 :
 
-        {
+        [{
           blueTeamParticipants.map((blueTeam) => {
             return <div key={blueTeam.address}>
               address : {blueTeam.address} <br />
               amount : {blueTeam.amount}<br />
             </div>
           })
-        }
+        }]
         <br />
       </>
     }
