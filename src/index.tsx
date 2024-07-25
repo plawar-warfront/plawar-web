@@ -12,6 +12,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import MyPage from './components/MyPage';
 
 const queryClient = new QueryClient()
 
@@ -25,6 +26,7 @@ getChainOptions().then((chainOptions) => {
         <BrowserRouter>
           <Routes>
             <Route path="/plawar-web" element={<App />} />
+            <Route path="/plawar-web/mypage" element={<MyPage />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

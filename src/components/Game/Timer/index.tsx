@@ -2,6 +2,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { useTimer } from 'react-timer-hook';
 import { plawarContractAddress } from '../../../constant';
+import useGetNowGameInfo from '../../../useQuery/useGetNowGameInfo';
+import { WalletStatus, useWallet } from '@xpla/wallet-provider';
 
 interface TimerProps {
     seconds: number;
@@ -24,15 +26,30 @@ const TimerComponent = ({ expiryTimestamp, setNowWar, nowWar }: {
     expiryTimestamp: Date; nowWar: boolean;
     setNowWar: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const queryClient = useQueryClient();
-  const { totalSeconds } = useTimer({ expiryTimestamp, onExpire: async () => {
-        if (nowWar === false) {
-            await queryClient.invalidateQueries({
-                queryKey: ['nowRound', plawarContractAddress],
-              });
-        };
-        setNowWar(!nowWar);
-    }});
+    const { refetch: gameInfoRefetch } = useGetNowGameInfo();
+    const { status, wallets } = useWallet();
+    const queryClient = useQueryClient();
+
+    const { totalSeconds } = useTimer({
+        expiryTimestamp, onExpire: async () => {
+            // 아래 api 호출 await 없어도 되나?
+            gameInfoRefetch();
+            if (status === WalletStatus.WALLET_CONNECTED && wallets.length > 0) {
+                queryClient.invalidateQueries({
+                    queryKey: ['useUserParticipateRoundInfo', wallets[0].xplaAddress, plawarContractAddress],
+                });
+            }
+            setTimeout(async () => {
+                await gameInfoRefetch();
+                if (status === WalletStatus.WALLET_CONNECTED && wallets.length > 0) {
+                    await queryClient.invalidateQueries({
+                        queryKey: ['useUserParticipateRoundInfo', wallets[0].xplaAddress, plawarContractAddress],
+                    });
+                }
+            }, 10 * 1000);
+            setNowWar(!nowWar); // api 호출 전에 있어도 되나?
+        }
+    });
 
     const formatTime = (sec: number): string => {
         const m: number = Math.floor(sec / 60);

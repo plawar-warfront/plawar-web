@@ -22,8 +22,7 @@ const useRegisterPrize = () => {
         contractAddress,
         {
           "register_prize": {
-            "round": param.round,
-            "team": param.team
+            "round": param.round
           }
         }
       )]

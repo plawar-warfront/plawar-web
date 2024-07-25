@@ -1,10 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation,  useQueryClient } from '@tanstack/react-query';
 import { plawarContractAddress } from '../constant';
-import { lcd } from '../lcd';
 import { useConnectedWallet } from '@xpla/wallet-provider';
 import { MsgExecuteContract } from '@xpla/xpla.js';
 import BigNumber from 'bignumber.js';
 import { Config } from '../useQuery/useConfig';
+import useGetNowGameInfo from '../useQuery/useGetNowGameInfo';
 
 interface Request {
   team: string;
@@ -15,6 +15,7 @@ const useParticipateGame = (config: Config) => {
   const contractAddress = plawarContractAddress;
   const connectedWallet = useConnectedWallet();
   const queryClient = useQueryClient();
+  const {refetch : gameInfoRefetch} = useGetNowGameInfo();
 
 
   const [yearMonthDate, time] = config.start_time.split(' ');
@@ -37,7 +38,7 @@ const useParticipateGame = (config: Config) => {
           connectedWallet.walletAddress,
           contractAddress,
           {
-            "distribute": {
+            "participate": {
               "round": nowRound,
               "team": param.team
             }
@@ -63,23 +64,13 @@ const useParticipateGame = (config: Config) => {
     mutationKey: ['useParticipateGame', contractAddress, Date.now()],
     onSuccess: async (res) => {
       setTimeout(async () => {
-        console.log(1);
-        await queryClient.invalidateQueries({
-          queryKey: ['useGetTeamAmount', res.round, contractAddress],
-        });
-        await queryClient.invalidateQueries({
-          queryKey: ['useGetTeamAddress',  res.round, res.team, contractAddress],
-        });
+        await gameInfoRefetch();
         await queryClient.invalidateQueries({
           queryKey: ['useUserBalance', res.address, contractAddress],
         });
         await queryClient.invalidateQueries({
-          queryKey: ['useGetParticipateRound', res.round, contractAddress],
+          queryKey: ['useUserParticipateRoundInfo', res.address, contractAddress],
         });
-        await queryClient.invalidateQueries({
-          queryKey: ['useGetUserAmount', res.round, res.address, contractAddress],
-        });
-        
       }, 6000)
     },
     onError: (err) => {
