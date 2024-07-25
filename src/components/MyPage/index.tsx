@@ -2,6 +2,7 @@ import Connect from "../Connect";
 import "../../App.css";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
 import Header from "../Header";
+import Claim from "./Claim";
 
 function MyPage() {
     const { status, wallets } = useWallet();
@@ -10,9 +11,7 @@ function MyPage() {
             <Header />
             <div className="flex h-[calc(100vh-80px)]">
                 {status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 ?
-                    <div>
-                        sdf
-                    </div>
+                    <Claim />
                     :
                     <div >
                         Please Connect Wallet!

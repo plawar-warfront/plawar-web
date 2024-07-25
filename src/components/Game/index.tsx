@@ -14,8 +14,6 @@ const Game = () => {
   const { data: config } = useConfig();
   const { data: nowGameInfo } = useGetNowGameInfo();
   const { status, wallets } = useWallet();
-  console.log(nowGameInfo);
-  console.log(1);
 
   return <div className="flex flex-1 flex-col justify-between">
     <div>
