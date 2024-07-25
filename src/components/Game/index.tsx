@@ -58,6 +58,7 @@ const GameInfo = ({ config }: { config: Config }) => {
   const [nowWar, setNowWar] = useState(warTime < config.war_min * 60);
 
   return <div>
+    게임시작시간(UTC): {config.start_time}<br />
     전쟁시간 : {config.war_min}
     <br />휴전시간 : {config.truce_min}
     {
