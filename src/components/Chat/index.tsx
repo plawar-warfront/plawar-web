@@ -8,6 +8,7 @@ import RenderChat from './RenderChat';
 export interface ChatMessage {
   address: string;
   message: string;
+  timestamp: Date;
 }
 
 const Chat: React.FC = () => {
