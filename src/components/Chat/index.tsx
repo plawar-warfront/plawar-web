@@ -24,9 +24,9 @@ const Chat: React.FC = () => {
   const queryClient = useQueryClient();
   const scrollbarRef = useRef<Scrollbars>(null);
 
-  const baseurl = process.env.REACT_APP_ENV !== "development" ? process.env.REACT_APP_API_URL || '' : 'http://localhost:5641/';
+  const baseurl = process.env.REACT_APP_ENV !== "development" ? process.env.REACT_APP_API_URL || '' : 'http://localhost:5641';
   const fetcher = async ({ pageParam = 1 }) => {
-    const response = await axios.get<ChatMessage[]>(`${baseurl}api/chathistory?perPage=${PAGE_SIZE}&page=${pageParam}`);
+    const response = await axios.get<ChatMessage[]>(`${baseurl}/api/chathistory?perPage=${PAGE_SIZE}&page=${pageParam}`);
     if (pageParam === 1) {
       setTimeout(() => {
         scrollbarRef.current?.scrollToBottom();
@@ -67,7 +67,7 @@ const Chat: React.FC = () => {
   const onMessageSubmit = useCallback((e: FormEvent) => {
     e.preventDefault();
     const { message } = state;
-    
+
     axios.post(`${baseurl}api/userchat`, {
       "address": wallets[0].xplaAddress,
       "message": message
