@@ -12,7 +12,7 @@ function App() {
       <Header />
       <div className="flex h-[calc(100vh-80px)]">
         <Game />
-        <div className="flex justify-end items-center h-full">
+        <div className="flex justify-end items-center h-full min-w-[500px]">
           {status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 ?
             <Chat />
             :

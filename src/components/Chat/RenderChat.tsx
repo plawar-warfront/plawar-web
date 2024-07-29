@@ -4,7 +4,7 @@ import { AccAddress } from '@xpla/xpla.js';
 import { truncate } from '@xpla.kitchen/utils';
 
 const RenderChat = ({ chat, userAddress }: { chat: ChatMessage[], userAddress: AccAddress }) => {
-
+  
   return <div className="beauty-scroll overflow-y-auto max-h-full flex flex-1 flex-col pr-4 scrollbar-gutter-stable">
     {
       chat.map(({ address, message, timestamp }, index) => (
