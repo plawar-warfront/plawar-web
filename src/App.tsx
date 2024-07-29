@@ -4,6 +4,7 @@ import Chat from "./components/Chat";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
 import Game from "./components/Game";
 import Header from "./components/Header";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const { status, wallets } = useWallet();
