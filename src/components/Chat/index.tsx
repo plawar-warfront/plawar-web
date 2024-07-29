@@ -92,10 +92,12 @@ const Chat: React.FC = () => {
           scrollbarRef.current.getScrollHeight() <
           scrollbarRef.current.getClientHeight() + scrollbarRef.current.getScrollTop() + 150
         ) {
+          console.log(1);
           setTimeout(() => {
             scrollbarRef.current?.scrollToBottom();
           }, 100);
         } else {
+          console.log(2);
           if (wallets && wallets.length > 0 && data.address !== wallets[0].xplaAddress) {
             toast.success('새 메시지가 도착했습니다.', {
               onClick() {

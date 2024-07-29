@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useCallback, useEffect } from 'react';
+import React, { FC, RefObject, useCallback, useEffect, useState } from 'react';
 import { ChatMessage } from '.';
 import { truncate } from '@xpla.kitchen/utils';
 import { InfiniteData } from '@tanstack/react-query';
@@ -14,10 +14,12 @@ interface Props {
     userAddress: string;
 }
 const RenderChat: FC<Props> = ({ scrollbarRef, isReachingEnd, isEmpty, chatData, fetchNextPage, userAddress }) => {
+    const [scrollHeight, setScrollHeight] = useState<number>()
     const onScroll = useCallback(
         (values: positionValues) => {
             if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
                 fetchNextPage();
+                console.log(values);
             }
         },
         [isReachingEnd, isEmpty, fetchNextPage, scrollbarRef],
@@ -25,9 +27,18 @@ const RenderChat: FC<Props> = ({ scrollbarRef, isReachingEnd, isEmpty, chatData,
 
     useEffect(() => {
         if ((chatData?.pageParams.length || 0) > 1) {
+            console.log(scrollbarRef.current?.getValues().scrollTop);
             if (scrollbarRef.current?.getValues().scrollTop === 0) {
-                scrollbarRef.current?.scrollTop((scrollbarRef.current?.getScrollHeight() / (chatData?.pageParams.length || 1)));
+                console.log("??", scrollbarRef.current?.getValues());
+                if (scrollbarRef.current?.getScrollHeight() < (scrollHeight || 1) * (chatData?.pageParams.length || 1)) {
+                    scrollbarRef.current?.scrollTop(  scrollbarRef.current?.getScrollHeight() -  (scrollHeight || 1) * ((chatData?.pageParams.length || 1) -1));
+                } else {
+                    scrollbarRef.current?.scrollTop( scrollHeight || 1);
+                }
             } 
+        } else {
+            console.log("!!", scrollbarRef.current?.getScrollHeight())
+            setScrollHeight(scrollbarRef.current?.getScrollHeight())
         }
     }, [chatData])
 
