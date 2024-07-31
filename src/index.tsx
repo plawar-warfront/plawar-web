@@ -13,6 +13,7 @@ import {
 } from '@tanstack/react-query'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MyPage from './components/MyPage';
+import GamePage from './components/Game';
 
 const queryClient = new QueryClient()
 
@@ -27,6 +28,7 @@ getChainOptions().then((chainOptions) => {
           <Routes>
             <Route path="/plawar-web" element={<App />} />
             <Route path="/plawar-web/mypage" element={<MyPage />} />
+            <Route path="/plawar-web/gamepage" element={<GamePage />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
@@ -37,3 +39,4 @@ getChainOptions().then((chainOptions) => {
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
