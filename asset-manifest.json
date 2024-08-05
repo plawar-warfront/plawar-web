@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "/plawar-web/static/css/main.bf23fb53.css",
-    "main.js": "/plawar-web/static/js/main.7e8383ed.js",
+    "main.css": "/plawar-web/static/css/main.91f63b1c.css",
+    "main.js": "/plawar-web/static/js/main.2962b556.js",
     "static/js/27.b74831fa.chunk.js": "/plawar-web/static/js/27.b74831fa.chunk.js",
     "index.html": "/plawar-web/index.html"
   },
   "entrypoints": [
-    "static/css/main.bf23fb53.css",
-    "static/js/main.7e8383ed.js"
+    "static/css/main.91f63b1c.css",
+    "static/js/main.2962b556.js"
   ]
 }
