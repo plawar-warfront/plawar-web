@@ -7,13 +7,13 @@ import getWarTime from "../../../util/getWarTime";
 import ParticipateForm from "../ParticipateForm";
 import axplaToXpla from "../../../util/axplaToXpla";
 import { truncate } from "@xpla.kitchen/utils";
-import useGetNowGameInfo, { NowGameInfo } from "../../../useQuery/useGetNowGameInfo";
+import useGetNowContractInfoFromAPI, { NowGameInfo } from "../../../useQuery/useGetNowContractInfoFromAPI";
 import useUserParticipateRoundInfo from "../../../useQuery/useUserPariticpateRoundInfo";
 import GameScreen from "../GameScreen";
 
 const Game = () => {
   const { data: config } = useConfig();
-  const { data: nowGameInfo } = useGetNowGameInfo();
+  const { data: nowGameInfo } = useGetNowContractInfoFromAPI();
   const { status, wallets } = useWallet();
 
   return <div className="flex flex-1 flex-col justify-between">

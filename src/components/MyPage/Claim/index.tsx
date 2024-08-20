@@ -27,10 +27,9 @@ const UserRoundComponent = ({ userParticipateRoundInfo, userCanClaimRound }: { u
 
     return <>
         {
-            userParticipateRoundInfo.map((roundinfo) => {
+            userParticipateRoundInfo.map((roundinfo, index) => {
                 const roundWinIndex = winRoundInfo.findIndex((e) => e.round === roundinfo.round);
                 const prizeAmount = roundWinIndex === -1 ? '0' : userCanClaimRound[roundWinIndex].amounts.total;
-                
                 const alreadyClaim = roundWinIndex === -1 ? false : userCanClaimRound[roundWinIndex].amounts.claimable === '0';
 
                 return <div key={`${roundinfo.round}round`} className="flex items-center gap-2 ">

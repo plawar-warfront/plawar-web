@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { useTimer } from 'react-timer-hook';
 import { plawarContractAddress } from '../../../constant';
-import useGetNowGameInfo from '../../../useQuery/useGetNowGameInfo';
+import useGetNowContractInfoFromAPI from '../../../useQuery/useGetNowContractInfoFromAPI';
 import { WalletStatus, useWallet } from '@xpla/wallet-provider';
 
 interface TimerProps {
@@ -26,7 +26,7 @@ const TimerComponent = ({ expiryTimestamp, setNowWar, nowWar }: {
     expiryTimestamp: Date; nowWar: boolean;
     setNowWar: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const { refetch: gameInfoRefetch } = useGetNowGameInfo();
+    const { refetch: gameInfoRefetch } = useGetNowContractInfoFromAPI();
     const { status, wallets } = useWallet();
     const queryClient = useQueryClient();
 

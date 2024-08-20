@@ -14,6 +14,7 @@ import {
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MyPage from './components/MyPage';
 import GamePage from './components/Game';
+import SubtitlePage from './components/SubtitlePage';
 
 const queryClient = new QueryClient()
 
@@ -29,6 +30,7 @@ getChainOptions().then((chainOptions) => {
             <Route path="/plawar-web" element={<App />} />
             <Route path="/plawar-web/mypage" element={<MyPage />} />
             <Route path="/plawar-web/gamepage" element={<GamePage />} />
+            <Route path="/plawar-web/setsubtitle" element={<SubtitlePage />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

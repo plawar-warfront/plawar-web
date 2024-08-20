@@ -4,7 +4,7 @@ import { useConnectedWallet } from '@xpla/wallet-provider';
 import { MsgExecuteContract } from '@xpla/xpla.js';
 import BigNumber from 'bignumber.js';
 import { Config } from '../useQuery/useConfig';
-import useGetNowGameInfo from '../useQuery/useGetNowGameInfo';
+import useGetNowContractInfoFromAPI from '../useQuery/useGetNowContractInfoFromAPI';
 
 interface Request {
   team: string;
@@ -15,7 +15,7 @@ const useParticipateGame = (config: Config) => {
   const contractAddress = plawarContractAddress;
   const connectedWallet = useConnectedWallet();
   const queryClient = useQueryClient();
-  const {refetch : gameInfoRefetch} = useGetNowGameInfo();
+  const {refetch : gameInfoRefetch} = useGetNowContractInfoFromAPI();
 
 
   const [yearMonthDate, time] = config.start_time.split(' ');
