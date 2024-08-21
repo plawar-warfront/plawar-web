@@ -3,7 +3,6 @@ import useConfig from "../../../useQuery/lcd/useConfig";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
 import ParticipateForm from "../ParticipateForm";
 import useGetNowContractInfoFromAPI, { NowGameInfo } from "../../../useQuery/serverapi/useGetNowContractInfoFromAPI";
-import Game from "../../GameInfoPage";
 import GameInfo from "../../GameInfoPage/GameInfo";
 import NavigateSubtitle from "./NavigateSubtitle";
 import { CircularProgress } from "@mui/material";
@@ -47,7 +46,7 @@ const GameScreen = () => {
                 <br/>
                 <br/>
                 <div>
-                    다음 Subtitle : {nowGameInfo.now_subtitle.blue} vs{nowGameInfo.now_subtitle.red} -  {nowGameInfo.now_subtitle.user_address === "" ? "Default Setting" : nowGameInfo.now_subtitle.user_address} / {axplaToXpla(nowGameInfo.now_subtitle.amount)} XPLA
+                    다음 Subtitle : {nowGameInfo.now_subtitle.blue} vs {nowGameInfo.now_subtitle.red} -  {nowGameInfo.now_subtitle.user_address === "" ? "Default Setting" : nowGameInfo.now_subtitle.user_address} / {axplaToXpla(nowGameInfo.now_subtitle.amount)} XPLA
 
 
                 </div>
