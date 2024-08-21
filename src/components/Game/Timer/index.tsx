@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { useTimer } from 'react-timer-hook';
 import { plawarContractAddress } from '../../../constant';
-import useGetNowContractInfoFromAPI from '../../../useQuery/useGetNowContractInfoFromAPI';
+import useGetNowContractInfoFromAPI from '../../../useQuery/serverapi/useGetNowContractInfoFromAPI';
 import { WalletStatus, useWallet } from '@xpla/wallet-provider';
 
 interface TimerProps {

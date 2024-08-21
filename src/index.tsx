@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
   getChainOptions,
@@ -13,8 +12,9 @@ import {
 } from '@tanstack/react-query'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MyPage from './components/MyPage';
-import GamePage from './components/Game';
+import GameInfoPage from './components/GameInfoPage';
 import SubtitlePage from './components/SubtitlePage';
+import Game from './components/Game';
 
 const queryClient = new QueryClient()
 
@@ -27,9 +27,9 @@ getChainOptions().then((chainOptions) => {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path="/plawar-web" element={<App />} />
+            <Route path="/plawar-web" element={<Game />} />
             <Route path="/plawar-web/mypage" element={<MyPage />} />
-            <Route path="/plawar-web/gamepage" element={<GamePage />} />
+            <Route path="/plawar-web/gameinfopage" element={<GameInfoPage />} />
             <Route path="/plawar-web/setsubtitle" element={<SubtitlePage />} />
           </Routes>
         </BrowserRouter>

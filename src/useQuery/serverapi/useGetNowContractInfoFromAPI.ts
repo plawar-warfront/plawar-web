@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { plawarContractAddress } from '../constant';
+import { plawarContractAddress } from '../../constant';
 import axios from "axios";
 
 export interface Subtitle {

@@ -2,7 +2,7 @@ import "./App.css";
 import Connect from "./components/Connect";
 import Chat from "./components/Chat";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
-import Game from "./components/Game";
+import Game from "./components/GameInfoPage";
 import Header from "./components/Header";
 import 'react-toastify/dist/ReactToastify.css';
 import GameScreen from "./components/Game/GameScreen";

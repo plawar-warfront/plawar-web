@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { plawarContractAddress } from '../constant';
-import { lcd } from '../lcd';
+import { plawarContractAddress } from '../../constant';
+import { lcd } from '../../lcd';
 
 const useGetClaimedRound = () => {
   const contractAddress = plawarContractAddress;

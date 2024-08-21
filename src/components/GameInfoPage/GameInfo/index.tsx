@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import useConfig, { Config } from "../../../useQuery/useConfig";
+import useConfig, { Config } from "../../../useQuery/lcd/useConfig";
 import { claimContractAddress, plawarContractAddress } from "../../../constant";
-import Timer from "../Timer";
+import Timer from "../../Game/Timer";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
 import getWarTime from "../../../util/getWarTime";
-import ParticipateForm from "../ParticipateForm";
+import ParticipateForm from "../../Game/ParticipateForm";
 import axplaToXpla from "../../../util/axplaToXpla";
 import { truncate } from "@xpla.kitchen/utils";
-import useGetNowContractInfoFromAPI, { NowGameInfo } from "../../../useQuery/useGetNowContractInfoFromAPI";
-import useUserParticipateRoundInfo from "../../../useQuery/useUserPariticpateRoundInfo";
-import GameScreen from "../GameScreen";
+import useGetNowContractInfoFromAPI, { NowGameInfo } from "../../../useQuery/serverapi/useGetNowContractInfoFromAPI";
+import useUserParticipateRoundInfo from "../../../useQuery/lcd/useUserPariticpateRoundInfo";
+import GameScreen from "../../Game/GameScreen";
 
 const Game = () => {
   const { data: config } = useConfig();

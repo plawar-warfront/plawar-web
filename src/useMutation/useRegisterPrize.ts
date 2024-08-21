@@ -4,7 +4,7 @@ import { lcd } from '../lcd';
 import { useConnectedWallet } from '@xpla/wallet-provider';
 import { MsgExecuteContract } from '@xpla/xpla.js';
 import BigNumber from 'bignumber.js';
-import { Config } from '../useQuery/useConfig';
+import { Config } from '../useQuery/lcd/useConfig';
 
 interface Request {
   team: string;

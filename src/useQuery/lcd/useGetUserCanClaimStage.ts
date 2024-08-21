@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { claimContractAddress } from '../constant';
-import { lcd } from '../lcd';
+import { claimContractAddress } from '../../constant';
+import { lcd } from '../../lcd';
 
 export interface ClaimDataResponse {
   address: string,

@@ -2,9 +2,9 @@ import Connect from "../Connect";
 import "../../App.css";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
 import Header from "../Header";
-import SubtitleCandidate from "../Game/GameScreen/SubtitleCandidate";
-import SetSubtitleForm from "../Game/GameScreen/SetSubtitleForm";
-import useGetNowContractInfoFromAPI from "../../useQuery/useGetNowContractInfoFromAPI";
+import SubtitleCandidate from "./SubtitleCandidate";
+import SetSubtitleForm from "./SetSubtitleForm";
+import useGetNowContractInfoFromAPI from "../../useQuery/serverapi/useGetNowContractInfoFromAPI";
 
 function SubtitlePage() {
     const { data: nowGameInfo } = useGetNowContractInfoFromAPI();

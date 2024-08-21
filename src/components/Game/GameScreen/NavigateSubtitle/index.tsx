@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { Subtitle } from "../../../../useQuery/useGetNowContractInfoFromAPI"
+import { Subtitle } from "../../../../useQuery/serverapi/useGetNowContractInfoFromAPI"
 import axplaToXpla from "../../../../util/axplaToXpla"
 import clsx from "clsx";
 
-const GameSubtitle = ({ nowSubtitle }: { nowSubtitle: Subtitle }) => {
+const NavigateSubtitle = ({ nowSubtitle }: { nowSubtitle: Subtitle }) => {
     const navigate = useNavigate();
     return <div className="flex justify-center w-full items-center">
         <div className=" flex justify-between w-full max-w-[1496px] items-center">
@@ -30,4 +30,4 @@ const GameSubtitle = ({ nowSubtitle }: { nowSubtitle: Subtitle }) => {
     </div>
 }
 
-export default GameSubtitle
+export default NavigateSubtitle

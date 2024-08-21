@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from "axios";
-import { plawarContractAddress } from '../constant';
-import { lcd } from '../lcd';
+import { plawarContractAddress } from '../../constant';
+import { lcd } from '../../lcd';
 import BigNumber from 'bignumber.js';
 
 const useUserBalance = (address: string) => {

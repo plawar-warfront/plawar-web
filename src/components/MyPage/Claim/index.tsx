@@ -1,15 +1,16 @@
 import { useWallet } from "@xpla/wallet-provider";
 import React, { useState } from "react";
-import useUserParticipateRoundInfo, { UserParticipateRoundInfo } from "../../../useQuery/useUserPariticpateRoundInfo";
+import useUserParticipateRoundInfo, { UserParticipateRoundInfo } from "../../../useQuery/lcd/useUserPariticpateRoundInfo";
 import clsx from "clsx";
 import axplaToXpla from "../../../util/axplaToXpla";
-import useGetUserCanClaimStage, { UserClaimData } from "../../../useQuery/useGetUserCanClaimStage";
+import useGetUserCanClaimStage, { UserClaimData } from "../../../useQuery/lcd/useGetUserCanClaimStage";
 import useUserClaim from "../../../useMutation/useUserClaim";
 
 const Claim = () => {
     const { wallets } = useWallet();
     const { data: userParticipateRoundInfo } = useUserParticipateRoundInfo(wallets[0].xplaAddress);
     const { data: userCanClaimRound } = useGetUserCanClaimStage(wallets[0].xplaAddress);
+    console.log(userParticipateRoundInfo, userCanClaimRound)
 
     return <div className="flex flex-1 flex-col w-full items-center">
         {userParticipateRoundInfo && userCanClaimRound && <UserRoundComponent userParticipateRoundInfo={userParticipateRoundInfo} userCanClaimRound={userCanClaimRound} />}
@@ -24,7 +25,7 @@ const UserRoundComponent = ({ userParticipateRoundInfo, userCanClaimRound }: { u
 
     const [requestError, setRequestError] = useState<string | null>(null);
     const [txhash, setTxhash] = useState<string | null>(null);
-
+    
     return <>
         {
             userParticipateRoundInfo.map((roundinfo, index) => {

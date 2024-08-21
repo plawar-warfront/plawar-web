@@ -1,5 +1,5 @@
-import { Subtitle } from "../../../../useQuery/useGetNowContractInfoFromAPI"
-import axplaToXpla from "../../../../util/axplaToXpla"
+import { Subtitle } from "../../../useQuery/serverapi/useGetNowContractInfoFromAPI"
+import axplaToXpla from "../../../util/axplaToXpla"
 
 const SubtitleCandidate = ({ subtitles }: { subtitles: Subtitle[] }) => {
     return <div className="flex-1">

@@ -3,8 +3,8 @@ import { plawarContractAddress } from '../constant';
 import { useConnectedWallet } from '@xpla/wallet-provider';
 import { MsgExecuteContract } from '@xpla/xpla.js';
 import BigNumber from 'bignumber.js';
-import { Config } from '../useQuery/useConfig';
-import useGetNowContractInfoFromAPI from '../useQuery/useGetNowContractInfoFromAPI';
+import { Config } from '../useQuery/lcd/useConfig';
+import useGetNowContractInfoFromAPI from '../useQuery/serverapi/useGetNowContractInfoFromAPI';
 
 interface Request {
   team: string;

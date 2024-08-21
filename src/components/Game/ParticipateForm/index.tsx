@@ -1,11 +1,11 @@
 import React, { ChangeEvent, FormEvent,  useState } from 'react';
 import { TextField } from '@mui/material';
-import { Config } from '../../../useQuery/useConfig';
+import { Config } from '../../../useQuery/lcd/useConfig';
 import getWarTime from '../../../util/getWarTime';
 import { useTimer } from 'react-timer-hook';
 import clsx from 'clsx';
 import useParticipateGame from '../../../useMutation/useParticipateGame';
-import useUserBalance from '../../../useQuery/useUserBalance';
+import useUserBalance from '../../../useQuery/lcd/useUserBalance';
 import { plawarContractOwner } from '../../../constant';
 import RegisterPrize from './RegisterPrize';
 
