@@ -12,6 +12,7 @@ import SubtitleCandidate from "../../SubtitlePage/SubtitleCandidate";
 import useGetGamestateFromAPI from "../../../useQuery/serverapi/useGetGamestateFromAPI";
 import useGetRoundInfoFromAPI from "../../../useQuery/serverapi/useGetRoundInfoFromAPI";
 import clsx from "clsx";
+import axplaToXpla from "../../../util/axplaToXpla";
 
 const GameScreen = () => {
     const { data: config } = useConfig();
@@ -35,16 +36,24 @@ const GameScreen = () => {
                 <GameInfo />
                 <br />
                 <br />
+                <Roundinfo nowGameInfo={nowGameInfo} />
+                <br />
+                <br />
                 <div>
-                    Next Subtitle will be ... (휴전이 되고 tx가 생성되면 바뀜...)
-                    (아무도 게임에 참여하지 않았다면, subtitle이 바뀌지 않음. claim tx가 생성될 때 적용되기 때문.)
-                    <NavigateSubtitle nowSubtitle={nowGameInfo.now_subtitle} />
+                    Subtitle은 Claim 될때 바뀜.
+                    만약 게임에 아무도 참여하지 않으면, Claim tx가 생성되지 않으므로 Subtitle도 변화되지 않음.
+                </div>
+                <br/>
+                <br/>
+                <div>
+                    다음 Subtitle : {nowGameInfo.now_subtitle.blue} vs{nowGameInfo.now_subtitle.red} -  {nowGameInfo.now_subtitle.user_address === "" ? "Default Setting" : nowGameInfo.now_subtitle.user_address} / {axplaToXpla(nowGameInfo.now_subtitle.amount)} XPLA
+
+
                 </div>
                 <div className="flex">
                     <SubtitleCandidate subtitles={nowGameInfo.subtitles} />
                     <SetSubtitleForm />
                 </div>
-                <Roundinfo nowGameInfo={nowGameInfo} />
             </div>
         </div> <div className={clsx({
             "block": !nowGameInfo.now_truce,

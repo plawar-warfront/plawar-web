@@ -17,21 +17,40 @@ const useSetSubtitle = () => {
 
   const fetchData = async (param: Request) => {
     const amount = new BigNumber(param.amount).multipliedBy(10 ** 18).toFixed(0);
-    const tx = await connectedWallet?.post({
-      msgs: [new MsgExecuteContract(
-        connectedWallet.walletAddress,
-        contractAddress,
-        {
-          "register_subtitle": {
-            "blue": param.blue,
-            "red": param.red,
-          }
-        },
-        { axpla: amount }
-      )]
-    });
 
-    return tx?.result.txhash;
+    if (param.amount === 0) {
+
+      const tx = await connectedWallet?.post({
+        msgs: [new MsgExecuteContract(
+          connectedWallet.walletAddress,
+          contractAddress,
+          {
+            "register_subtitle": {
+              "blue": param.blue,
+              "red": param.red,
+            }
+          },
+        )]
+      });
+
+      return tx?.result.txhash;
+    } else {
+      const tx = await connectedWallet?.post({
+        msgs: [new MsgExecuteContract(
+          connectedWallet.walletAddress,
+          contractAddress,
+          {
+            "register_subtitle": {
+              "blue": param.blue,
+              "red": param.red,
+            }
+          },
+          { axpla: amount }
+        )]
+      });
+
+      return tx?.result.txhash;
+    }
   };
 
   return useMutation({
