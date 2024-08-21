@@ -20,6 +20,7 @@ const GameScreen = () => {
     const { data: nowGameInfo } = useGetNowContractInfoFromAPI();
     const { data: gamestate } = useGetGamestateFromAPI();
 
+    const buildurl = process.env.REACT_APP_ENV !== "development" ? `${process.env.PUBLIC_URL}/unitybuild/index.html` : `${process.env.PUBLIC_URL}/unitybuildlocal/index.html`;
     if (!nowGameInfo) return <CircularProgress />
     return <>
         <div className={clsx({
@@ -61,7 +62,7 @@ const GameScreen = () => {
         }, "flex flex-1 flex-col justify-between p-4")}>
             <NavigateSubtitle nowSubtitle={nowGameInfo.now_subtitle} />
             <iframe
-                src={`${process.env.PUBLIC_URL}/unitybuild/index.html`}
+                src={buildurl}
                 style={{ width: '100%', height: '100%', border: 'none' }}
                 title="Example Site"
                 allowFullScreen
