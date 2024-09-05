@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import useConfig, { Config } from "../../../useQuery/lcd/useConfig";
-import { claimContractAddress, plawarContractAddress } from "../../../constant";
-import Timer from "../../Game/Timer";
+import useConfig, { Config } from "../../useQuery/lcd/useConfig";
+import { claimContractAddress, plawarContractAddress } from "../../constant";
+import Timer from "../Game/Timer";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
-import getWarTime from "../../../util/getWarTime";
-import axplaToXpla from "../../../util/axplaToXpla";
+import getWarTime from "../../util/getWarTime";
+import axplaToXpla from "../../util/axplaToXpla";
 import { truncate } from "@xpla.kitchen/utils";
-import useGetNowContractInfoFromAPI, { NowGameInfo } from "../../../useQuery/serverapi/useGetNowContractInfoFromAPI";
-import useUserParticipateRoundInfo from "../../../useQuery/lcd/useUserPariticpateRoundInfo";
+import useGetNowContractInfoFromAPI, { NowGameInfo } from "../../useQuery/serverapi/useGetNowContractInfoFromAPI";
+import useUserParticipateRoundInfo from "../../useQuery/lcd/useUserPariticpateRoundInfo";
 
-const Game = () => {
+const GameInfo = () => {
   const { data: config } = useConfig();
   const { data: nowGameInfo } = useGetNowContractInfoFromAPI();
   const { status, wallets } = useWallet();
@@ -22,7 +22,7 @@ const Game = () => {
       <br />
       claim 컨트랙트 주소 : {claimContractAddress}
       {
-        config && <GameInfo config={config} />
+        config && <GameInfoDetail config={config} />
       }
       ---<br />
       {
@@ -46,9 +46,9 @@ const Game = () => {
   </div>
 }
 
-export default Game;
+export default GameInfo;
 
-const GameInfo = ({ config }: { config: Config }) => {
+const GameInfoDetail = ({ config }: { config: Config }) => {
   const warTime = getWarTime(config.war_min, config.truce_min, config.start_time);
   const [nowWar, setNowWar] = useState(warTime < config.war_min * 60);
 

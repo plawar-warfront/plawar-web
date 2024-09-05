@@ -12,7 +12,6 @@ import {
 } from '@tanstack/react-query'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MyPage from './components/MyPage';
-import GameInfoPage from './components/GameInfoPage';
 import SubtitlePage from './components/SubtitlePage';
 import Game from './components/Game';
 
@@ -29,7 +28,6 @@ getChainOptions().then((chainOptions) => {
           <Routes>
             <Route path="/plawar-web" element={<Game />} />
             <Route path="/plawar-web/mypage" element={<MyPage />} />
-            <Route path="/plawar-web/gameinfopage" element={<GameInfoPage />} />
             <Route path="/plawar-web/setsubtitle" element={<SubtitlePage />} />
           </Routes>
         </BrowserRouter>

@@ -3,7 +3,7 @@ import useConfig from "../../../useQuery/lcd/useConfig";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
 import ParticipateForm from "../ParticipateForm";
 import useGetNowContractInfoFromAPI, { NowGameInfo } from "../../../useQuery/serverapi/useGetNowContractInfoFromAPI";
-import GameInfo from "../../GameInfoPage/GameInfo";
+import GameInfo from "../../GameInfo";
 import NavigateSubtitle from "./NavigateSubtitle";
 import { CircularProgress } from "@mui/material";
 import SetSubtitleForm from "../../SubtitlePage/SetSubtitleForm";
