@@ -35,7 +35,7 @@ const GameScreen = () => {
                 <OptionSelector />
 
                 <span className="text-[30px]">
-                    휴전중
+                    {nowGameInfo.now_truce ? "휴전중" : "전쟁중"}
                 </span>
                 <br />
                 <br />
