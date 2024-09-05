@@ -12,6 +12,8 @@ import useGetGamestateFromAPI from "../../../useQuery/serverapi/useGetGamestateF
 import useGetRoundInfoFromAPI from "../../../useQuery/serverapi/useGetRoundInfoFromAPI";
 import clsx from "clsx";
 import axplaToXpla from "../../../util/axplaToXpla";
+import OptionSelector from "../../OptionSelector";
+import useShowGameType from '../../../zustand/useShowGameType';
 
 const GameScreen = () => {
     const { data: config } = useConfig();
@@ -19,15 +21,19 @@ const GameScreen = () => {
     const { data: nowGameInfo } = useGetNowContractInfoFromAPI();
     const { data: gamestate } = useGetGamestateFromAPI();
 
+    const { showGameType } = useShowGameType();
+
+
     const buildurl = process.env.REACT_APP_ENV !== "development" ? `${process.env.PUBLIC_URL}/unitybuild/index.html` : `${process.env.PUBLIC_URL}/unitybuildlocal/index.html`;
     if (!nowGameInfo) return <CircularProgress />
     return <>
-        <div className={clsx({
-            "block": nowGameInfo.now_truce,
-            "hidden" : !nowGameInfo.now_truce
-
-        }, "flex flex-1 flex-col justify-between p-4")}>
+        <div className={clsx("flex flex-1 flex-col justify-between p-4",
+            (showGameType === "auto" ? (nowGameInfo.now_truce ? "block" : "hidden") : (showGameType === "game"
+                ? "hidden" : "block")),
+        )}>
             <div>
+                <OptionSelector />
+
                 <span className="text-[30px]">
                     휴전중
                 </span>
@@ -43,8 +49,8 @@ const GameScreen = () => {
                     Subtitle은 Claim 될때 바뀜.
                     만약 게임에 아무도 참여하지 않으면, Claim tx가 생성되지 않으므로 Subtitle도 변화되지 않음.
                 </div>
-                <br/>
-                <br/>
+                <br />
+                <br />
                 <div>
                     다음 Subtitle : {nowGameInfo.now_subtitle.blue} vs {nowGameInfo.now_subtitle.red} -  {nowGameInfo.now_subtitle.user_address === "" ? "Default Setting" : nowGameInfo.now_subtitle.user_address} / {axplaToXpla(nowGameInfo.now_subtitle.amount)} XPLA
 
@@ -55,10 +61,10 @@ const GameScreen = () => {
                     <SetSubtitleForm />
                 </div>
             </div>
-        </div> <div className={clsx({
-            "block": !nowGameInfo.now_truce,
-            "hidden" : nowGameInfo.now_truce
-        }, "flex flex-1 flex-col justify-between p-4")}>
+        </div> <div className={clsx("flex flex-1 flex-col justify-between p-4", (showGameType === "auto" ? (nowGameInfo.now_truce ? "hidden" : "block") : (showGameType === "game"
+            ? "block" : "hidden")))}>
+            <OptionSelector />
+
             <NavigateSubtitle nowSubtitle={nowGameInfo.now_subtitle} />
             <iframe
                 src={buildurl}

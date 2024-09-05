@@ -69,6 +69,7 @@ const UserRoundComponent = ({ userParticipateRoundInfo, userCanClaimRound }: { u
                 txhash && <a
                     href={`https://explorer.xpla.io/testnet/tx/${txhash}`}
                     target="_blank"
+                    rel="noreferrer noopener"
                     className="text-[#00B1FF] overflow-hidden whitespace-nowrap text-ellipsis w-full max-w-[210px] inline-block"
                 >
                     {txhash}

@@ -4,12 +4,10 @@ import { claimContractAddress, plawarContractAddress } from "../../../constant";
 import Timer from "../../Game/Timer";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
 import getWarTime from "../../../util/getWarTime";
-import ParticipateForm from "../../Game/ParticipateForm";
 import axplaToXpla from "../../../util/axplaToXpla";
 import { truncate } from "@xpla.kitchen/utils";
 import useGetNowContractInfoFromAPI, { NowGameInfo } from "../../../useQuery/serverapi/useGetNowContractInfoFromAPI";
 import useUserParticipateRoundInfo from "../../../useQuery/lcd/useUserPariticpateRoundInfo";
-import GameScreen from "../../Game/GameScreen";
 
 const Game = () => {
   const { data: config } = useConfig();
@@ -93,12 +91,12 @@ const RoundInfo = ({ nowGameInfo }: { nowGameInfo: NowGameInfo }) => {
 
         blue팀 amount : {axplaToXpla(nowGameInfo.blue_team_amount)} <br />
 
-        blue팀 참가자수 :{nowGameInfo.blue_participants.length}
+        blue팀 참가자수 :{nowGameInfo.recent_blue_participants.length}
         <br />
         blue팀 참가자 :
 
         [{
-          nowGameInfo.blue_participants.map((blueTeam) => {
+          nowGameInfo.recent_blue_participants.map((blueTeam) => {
             return <div key={blueTeam[0]}>
               address : {truncate(blueTeam[0], [5, 4])}, amount : {axplaToXpla(blueTeam[1])} XPLA<br />
             </div>
@@ -109,11 +107,11 @@ const RoundInfo = ({ nowGameInfo }: { nowGameInfo: NowGameInfo }) => {
 
         red팀 amount : {axplaToXpla(nowGameInfo.red_team_amount)} <br />
 
-        red팀 참가자수 :{nowGameInfo.red_participants.length}
+        red팀 참가자수 :{nowGameInfo.recent_red_participants.length}
         <br />
         red팀 참가자 :
         [{
-          nowGameInfo.red_participants.map((redTeam) => {
+          nowGameInfo.recent_red_participants.map((redTeam) => {
             return <div key={redTeam[0]}>
               address : {truncate(redTeam[0], [5, 4])}, amount : {axplaToXpla(redTeam[1])} XPLA<br />
             </div>

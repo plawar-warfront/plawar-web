@@ -6,8 +6,8 @@ export interface NowGameInfo {
   nowround: number,
   red_team_amount: string,
   blue_team_amount: string,
-  red_participants: { 0: string, 1: string }[], // (addr, uint128)
-  blue_participants: { 0: string, 1: string }[],
+  recent_red_participants: { 0: string, 1: string }[], // (addr, uint128)
+  recent_blue_participants: { 0: string, 1: string }[],
   claimed_round: number[],
 }
 
