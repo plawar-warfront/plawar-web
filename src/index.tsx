@@ -10,10 +10,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import MyPage from './components/MyPage';
-import SubtitlePage from './components/SubtitlePage';
-import Game from './components/Game';
+import App from "./App"
 
 const queryClient = new QueryClient()
 
@@ -24,13 +21,7 @@ getChainOptions().then((chainOptions) => {
   root.render(
     <WalletProvider {...chainOptions}>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/plawar-web" element={<Game />} />
-            <Route path="/plawar-web/mypage" element={<MyPage />} />
-            <Route path="/plawar-web/setsubtitle" element={<SubtitlePage />} />
-          </Routes>
-        </BrowserRouter>
+        <App />
       </QueryClientProvider>
     </WalletProvider>
   );

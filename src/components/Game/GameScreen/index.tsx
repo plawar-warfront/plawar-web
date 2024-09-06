@@ -14,6 +14,7 @@ import clsx from "clsx";
 import axplaToXpla from "../../../util/axplaToXpla";
 import OptionSelector from "../../OptionSelector";
 import useShowGameType from '../../../zustand/useShowGameType';
+import UnityBuild from "./UnityBuild";
 
 const GameScreen = () => {
     const { data: config } = useConfig();
@@ -24,7 +25,6 @@ const GameScreen = () => {
     const { showGameType } = useShowGameType();
 
 
-    const buildurl = process.env.REACT_APP_ENV !== "development" ? `${process.env.PUBLIC_URL}/unitybuild/index.html` : `${process.env.PUBLIC_URL}/unitybuildlocal/index.html`;
     if (!nowGameInfo) return <CircularProgress />
     return <>
         <div className={clsx("flex flex-1 flex-col justify-between p-4",
@@ -66,12 +66,7 @@ const GameScreen = () => {
             <OptionSelector />
 
             <NavigateSubtitle nowSubtitle={nowGameInfo.now_subtitle} />
-            <iframe
-                src={buildurl}
-                style={{ width: '100%', height: '100%', border: 'none' }}
-                title="Example Site"
-                allowFullScreen
-            />
+            <UnityBuild />
             {
                 config && <ParticipateForm config={config}
                     address={status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 ? wallets[0].xplaAddress : undefined}
