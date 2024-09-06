@@ -64,7 +64,7 @@ const GameScreen = () => {
         </div> <div className={clsx("flex flex-1 flex-col justify-between p-4", (showGameType === "auto" ? (nowGameInfo.now_truce ? "hidden" : "block") : (showGameType === "game"
             ? "block" : "hidden")))}>
             <OptionSelector />
-
+현재 라운드 : {nowGameInfo.nowround}
             <NavigateSubtitle nowSubtitle={nowGameInfo.now_subtitle} />
             <UnityBuild />
             {
