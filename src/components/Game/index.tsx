@@ -3,11 +3,12 @@ import "../../App.css";
 import Header from "../Header";
 import GameScreen from "./GameScreen";
 import Chat from "../Chat";
+import clsx from "clsx";
 
-function Game() {
+function Game({classNames} : {classNames:string}) {
   const { status, wallets } = useWallet();
   return (
-    <div className="App min-h-screen ">
+    <div className={clsx("App min-h-screen ", classNames)}>
       <Header />
       <div className="flex h-[calc(100vh-80px)]">
         <GameScreen />
