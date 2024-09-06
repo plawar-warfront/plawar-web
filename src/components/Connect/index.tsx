@@ -10,22 +10,28 @@ import { selectConnection } from "./ConnectModal";
 import { truncate } from "@xpla.kitchen/utils";
 import "../../App.css";
 
+let timerId: any = undefined;
+
 export default function Connect() {
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
-  const { status, availableConnections, connect, disconnect, wallets, refetchStates } =
+  const wallet =
     useWallet();
+  const { status, availableConnections, connect, disconnect, wallets, refetchStates } = wallet;
   const isDesktop = useMediaQuery("(min-width:768px)");
 
   useEffect(() => {
-    if (status === WalletStatus.WALLET_CONNECTED && wallets.length > 0) {
-      setInterval(() => {
-        console.log('refetch');
-        refetchStates()
-      }, 50 * 1000)
+    if (wallet) {
+      if (timerId) {
+        clearInterval(timerId)
+      }
+
+      timerId = setInterval(async () => {
+        await refetchStates();
+      }, 1000);
     }
-  }, [status]);
+  }, [wallet]);
 
   const clickConnect = async () => {
     try {
@@ -37,7 +43,7 @@ export default function Connect() {
 
       available.map((a) => {
         if (a.icon === 'https://assets.xpla.io/icon/extension/icon-c2xvault.png') {
-          return {type: 'EXTENSION', name: 'XPLA Vault Wallet', icon: 'https://assets.xpla.io/icon/extension/icon.png', identifier: 'xplavault'};
+          return { type: 'EXTENSION', name: 'XPLA Vault Wallet', icon: 'https://assets.xpla.io/icon/extension/icon.png', identifier: 'xplavault' };
         } else {
           return a
         }
@@ -46,50 +52,50 @@ export default function Connect() {
       if (
         isDesktop &&
         available.filter((c) => c.name === "XPLA Vault Wallet").length === 0
-        ) {
-          available.unshift({
-            type: ConnectType.READONLY,
-            name: "XPLA Vault Wallet",
-            icon: "https://assets.xpla.io/icon/extension/icon.png",
-            identifier: "https://download-vault.xpla.io",
-          } as Connection);
-        }
-        if (
-          isDesktop &&
-          available.filter((c) => c.name === "XPLA GAMES Wallet").length === 0
-        ) {
-          available.splice(1, 0, {
-            type: ConnectType.READONLY,
-            name: "XPLA GAMES Wallet",
-            icon: "https://assets.xpla.io/icon/extension/icon.png",
-            identifier: "https://xpla.games/download",
-          } as Connection);
-        }
+      ) {
+        available.unshift({
+          type: ConnectType.READONLY,
+          name: "XPLA Vault Wallet",
+          icon: "https://assets.xpla.io/icon/extension/icon.png",
+          identifier: "https://download-vault.xpla.io",
+        } as Connection);
+      }
+      if (
+        isDesktop &&
+        available.filter((c) => c.name === "XPLA GAMES Wallet").length === 0
+      ) {
+        available.splice(1, 0, {
+          type: ConnectType.READONLY,
+          name: "XPLA GAMES Wallet",
+          icon: "https://assets.xpla.io/icon/extension/icon.png",
+          identifier: "https://xpla.games/download",
+        } as Connection);
+      }
 
       const selected = await selectConnection(
         isDesktop
           ? available.filter((connection) => {
-              if (connection.name === "XPLA GAMES Wallet") {
-                connection.icon = "https://xpla.events/img/xplagames.svg";
-                return connection;
-              } else {
-                return connection;
-              }
-            })
+            if (connection.name === "XPLA GAMES Wallet") {
+              connection.icon = "https://xpla.events/img/xplagames.svg";
+              return connection;
+            } else {
+              return connection;
+            }
+          })
           : [
-              {
-                type: "WALLETCONNECT",
-                name: "XPLA Vault Wallet",
-                icon: "https://assets.xpla.io/icon/extension/icon.png",
-                identifier: undefined,
-              } as Connection,
-              {
-                type: "WALLETCONNECT",
-                name: "XPLA GAMES Wallet",
-                icon: "https://xpla.events/img/xplagames.svg",
-                identifier: "xplagames",
-              } as Connection,
-            ]
+            {
+              type: "WALLETCONNECT",
+              name: "XPLA Vault Wallet",
+              icon: "https://assets.xpla.io/icon/extension/icon.png",
+              identifier: undefined,
+            } as Connection,
+            {
+              type: "WALLETCONNECT",
+              name: "XPLA GAMES Wallet",
+              icon: "https://xpla.events/img/xplagames.svg",
+              identifier: "xplagames",
+            } as Connection,
+          ]
       );
 
       if (!selected) {
@@ -111,7 +117,7 @@ export default function Connect() {
           await connect(type, identifier);
         }
       }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   useEffect(() => {
