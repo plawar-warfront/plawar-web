@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { plawarContractAddress } from '../../constant';
 import { lcd } from '../../lcd';
 
-interface UserParticipateRoundInfoAPIResponse {
+export interface UserParticipateRoundInfoAPIResponse {
   data : UserParticipateRoundInfo[],
   total : number,
   offset : number,
@@ -14,22 +14,24 @@ export interface UserParticipateRoundInfo {
   round : number,
   amount: string,
   team : string,
-  state: "WIN" | "DRAW" | "LOSE" | "NOWROUND",
 }
 
-const useUserParticipateRoundInfo = (address: string) => {
+const useUserParticipateRoundInfo = (address: string, offset = 0, limit = 10, order = "desc") => {
   const contractAddress = plawarContractAddress;
   return useQuery({
-    queryKey: ['useUserParticipateRoundInfo', address, contractAddress],
+    queryKey: ['useUserParticipateRoundInfo', address, contractAddress, offset, limit, order],
     queryFn: async () => {
       try {
         const data = await lcd.wasm.contractQuery<UserParticipateRoundInfoAPIResponse>(contractAddress, {
           get_participate_round_all_info: {
-            useraddress: address
+            useraddress: address,
+            offset,
+            limit,
+            order
           }
         });
 
-        return data.data;
+        return data;
       } catch (e) {
         console.log(e);
       }

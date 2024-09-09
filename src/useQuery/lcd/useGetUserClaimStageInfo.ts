@@ -18,15 +18,16 @@ export interface UserClaimData {
   }
 }
 
-const useGetUserCanClaimStage = (userAddress: string) => {
+const useGetUserClaimStageInfo = (userAddress: string, stages: number[]) => {
   const contractAddress = claimContractAddress;
   return useQuery({
-    queryKey: ['useGetUserCanClaimStage', userAddress, contractAddress],
+    queryKey: ['useGetUserClaimStageInfo', userAddress, contractAddress, stages.join(',')],
     queryFn: async () => {
       try {
         const data = await lcd.wasm.contractQuery<ClaimDataResponse>(contractAddress, {
           "vesting_account": {
-            "address": userAddress
+            "address": userAddress,
+            stages
           }
         });
         return data.vestings;
@@ -37,7 +38,7 @@ const useGetUserCanClaimStage = (userAddress: string) => {
   })
 }
 
-export default useGetUserCanClaimStage;
+export default useGetUserClaimStageInfo;
 
 
 

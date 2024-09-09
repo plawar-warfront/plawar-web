@@ -3,8 +3,9 @@ import { claimContractAddress } from '../constant';
 import { useConnectedWallet } from '@xpla/wallet-provider';
 import { MsgExecuteContract } from '@xpla/xpla.js';
 
-interface Request {
-  stage: number
+export interface Request {
+  stage: number,
+  stages : number[]
 }
 
 const useUserClaim = () => {
@@ -28,7 +29,8 @@ const useUserClaim = () => {
 
     return {
       txhash: tx?.result.txhash || '',
-      address: connectedWallet?.walletAddress
+      address: connectedWallet?.walletAddress,
+      stages : param.stages
     };
   };
 
@@ -38,9 +40,8 @@ const useUserClaim = () => {
     onSuccess: (res) => {
       setTimeout(async () => {
         await queryClient.invalidateQueries({
-          queryKey: ['useGetUserCanClaimStage', res.address, contractAddress],
+          queryKey: ['useGetUserClaimStageInfo', res.address, contractAddress, res.stages.join(',')],
         });
-
       }, 6000)
     },
     onError: (err) => {

@@ -131,9 +131,9 @@ const UserParticipateInfo = ({ address }: { address: string; }) => {
     {
       UserParticipateRoundInfo && <div>
         참가한 라운드 정보 : [{
-          UserParticipateRoundInfo.map((c) => {
+          UserParticipateRoundInfo.data.map((c) => {
             return <div key={`${c.round}round`}>
-              {c.round} 라운드 - team : {c.team}, amount : {axplaToXpla(c.amount)}, state : {c.state},
+              {c.round} 라운드 - team : {c.team}, amount : {axplaToXpla(c.amount)}
             </div>
           })
         }]
