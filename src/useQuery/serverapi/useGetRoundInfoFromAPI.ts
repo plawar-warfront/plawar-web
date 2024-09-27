@@ -19,8 +19,8 @@ const useGetRoundInfoFromAPI = (round : number) => {
     queryKey: ['useGetRoundInfoFromAPI', plawarContractAddress, baseurl, round],
     queryFn: async () => {
       try {
-        const response = await axios.get<RoundInfo>(`${baseurl}/api/roundinfo?round=${round}`);
-        return response.data;
+        const response = await axios.get<{status : string, data: RoundInfo, message? :string}>(`${baseurl}/api/roundinfo?round=${round}`);
+        return response.data.data;
       } catch (e) {
         console.log(e);
       }

@@ -29,8 +29,8 @@ const useGetNowContractInfoFromAPI = () => {
     queryKey: ['useGetNowContractInfoFromAPI', plawarContractAddress, baseurl],
     queryFn: async () => {
       try {
-        const response = await axios.get<NowGameInfo>(`${baseurl}/api/contractinfo`);
-        return response.data;
+        const response = await axios.get<{status : string, data: NowGameInfo, message? :string}>(`${baseurl}/api/contractinfo`);
+        return response.data.data;
       } catch (e) {
         console.log(e);
       }

@@ -10,8 +10,8 @@ const useGetRoundListInfoFromAPI = (rounds : string) => {
     queryKey: ['useGetRoundListInfoFromAPI', plawarContractAddress, baseurl, rounds],
     queryFn: async () => {
       try {
-        const response = await axios.get<RoundInfo[]>(`${baseurl}/api/roundlistinfo?rounds=${rounds}`);
-        return response.data;
+        const response = await axios.get<{status : string, data: RoundInfo[], message? :string}>(`${baseurl}/api/roundlistinfo?rounds=${rounds}`);
+        return response.data.data;
       } catch (e) {
         console.log(e);
       }

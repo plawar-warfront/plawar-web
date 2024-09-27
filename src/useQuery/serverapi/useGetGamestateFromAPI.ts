@@ -15,8 +15,8 @@ const useGetGamestateFromAPI = () => {
     queryKey: ['useGetGamestateFromAPI', plawarContractAddress, baseurl],
     queryFn: async () => {
       try {
-        const response = await axios.get<Gamestate>(`${baseurl}/api/gamestate`);
-        return response.data;
+        const response = await axios.get<{status : string, data: Gamestate, message? :string}>(`${baseurl}/api/gamestate`);
+        return response.data.data;
       } catch (e) {
         console.log(e);
       }
