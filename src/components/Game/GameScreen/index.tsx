@@ -67,8 +67,11 @@ const GameScreen = () => {
         </div> <div className={clsx("flex flex-1 flex-col justify-between p-4", (showGameType === "auto" ? (nowGameInfo.now_truce ? "hidden" : "block") : (showGameType === "game"
             ? "block" : "hidden")))}>
             <OptionSelector />
-현재 라운드 : {nowGameInfo.nowround} {
-    config && latestBlock && <RestBlockinfo config={config} latestBlock={parseInt(latestBlock, 10)}/>
+{
+    config && latestBlock && <span>
+        현재 라운드 : {nowGameInfo.nowround} /&nbsp;
+        <RestBlockinfo config={config} latestBlock={parseInt(latestBlock, 10)}/>
+        </span>
 }
             <NavigateSubtitle nowSubtitle={nowGameInfo.now_subtitle} />
             <UnityBuild />
@@ -95,7 +98,7 @@ const RestBlockinfo = ({ config , latestBlock} : {config : Config, latestBlock :
     const quot = Math.floor(blockinterval / roundblocknum);
     const nowWar = remainder < config.warblocknum;
     return <span>
-        현재 최신 블록 : {latestBlock} /
+        현재 최신 블록 : {latestBlock} /&nbsp;
     {
       nowWar ?
         <span>
