@@ -24,7 +24,7 @@ const Chat: React.FC = () => {
   const queryClient = useQueryClient();
   const scrollbarRef = useRef<Scrollbars>(null);
 
-  const baseurl = process.env.REACT_APP_ENV !== "development" ? `${process.env.REACT_APP_API_URL || ''}/discord` : 'http://localhost:5641';
+  const baseurl = process.env.REACT_APP_ENV !== "development" ? `${process.env.REACT_APP_API_URL || ''}/discord` : 'http://localhost:5642';
   const fetcher = async ({ pageParam = 1 }) => {
     const response = await axios.get<ChatMessage[]>(`${baseurl}/api/chathistory?perPage=${PAGE_SIZE}&page=${pageParam}`);
     if (pageParam === 1) {
@@ -153,11 +153,13 @@ const Chat: React.FC = () => {
         <div className="flex gap-2 w-full justify-between">
           <TextField
             name="message"
+            inputProps={{maxLength : 100}}
             onChange={onTextChange}
             value={state.message}
             variant="outlined"
             label="Message"
             className='w-full'
+            autoComplete='off'
             required
           />
           <button className="border min-w-[100px]">보내기</button>
