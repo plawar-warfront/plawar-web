@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import useConfig, { Config } from "../../useQuery/lcd/useConfig";
 import { claimContractAddress, plawarContractAddress } from "../../constant";
-import Timer from "../Game/Timer";
 import { WalletStatus, useWallet } from "@xpla/wallet-provider";
-import getWarTime from "../../util/getWarTime";
 import axplaToXpla from "../../util/axplaToXpla";
 import { truncate } from "@xpla.kitchen/utils";
 import useGetNowContractInfoFromAPI, { NowGameInfo } from "../../useQuery/serverapi/useGetNowContractInfoFromAPI";
 import useUserParticipateRoundInfo from "../../useQuery/lcd/useUserPariticpateRoundInfo";
+import useLatestBlock from "../../useQuery/lcd/useLatestBlock";
 
 const GameInfo = () => {
   const { data: config } = useConfig();
   const { data: nowGameInfo } = useGetNowContractInfoFromAPI();
   const { status, wallets } = useWallet();
+  const { data : latestBlock } = useLatestBlock();
 
   return <div className="flex flex-1 flex-col justify-between">
     <div>
@@ -21,8 +21,12 @@ const GameInfo = () => {
       게임 컨트랙트 주소 : {plawarContractAddress}
       <br />
       claim 컨트랙트 주소 : {claimContractAddress}
+      <br/> 
+      현재 최신 블록 : {latestBlock}
+    
+    // 이거 now_truce 값으로 설정해주기 (gameinfodetail부분 설정하는거!)
       {
-        config && <GameInfoDetail config={config} />
+        config && latestBlock&& <GameInfoDetail config={config} latestBlock={parseInt(latestBlock, 10)} />
       }
       ---<br />
       {
@@ -48,34 +52,26 @@ const GameInfo = () => {
 
 export default GameInfo;
 
-const GameInfoDetail = ({ config }: { config: Config }) => {
-  const warTime = getWarTime(config.war_min, config.truce_min, config.start_time);
-  const [nowWar, setNowWar] = useState(warTime < config.war_min * 60);
+const GameInfoDetail = ({ config, latestBlock }: { config: Config, latestBlock : number }) => {
+  const blockinterval = latestBlock - config.startblockheight;
+  const roundblocknum = config.warblocknum + config.truceblocknum
+  const remainder = blockinterval % roundblocknum;
+  const quot = Math.floor(blockinterval / roundblocknum);
+  const nowWar = remainder < config.warblocknum;
 
   return <div>
-    게임시작시간(UTC): {config.start_time}<br />
-    전쟁시간 : {config.war_min}
-    <br />휴전시간 : {config.truce_min}
+    게임시작블록: {config.startblockheight}
+    <br />
+    전쟁블록: {config.warblocknum} (휴전 직전 block에는 참가할 수 없음.)
+    <br />휴전블록 개수 : {config.truceblocknum}
     {
       nowWar ?
         <div>
-          전쟁시간 끝나는 타이머
-          <Timer
-            key={'war'}
-            nowWar={nowWar}
-            setNowWar={setNowWar}
-            seconds={config.war_min * 60 - warTime}
-          />
+          휴전까지 남은 블록 : {(quot) * roundblocknum  + config.warblocknum - blockinterval }
         </div>
         :
         <div>
-          휴전시간 끝나는 타이머
-          <Timer
-            key={'truce'}
-            nowWar={nowWar}
-            setNowWar={setNowWar}
-            seconds={(config.war_min + config.truce_min) * 60 - warTime}
-          />
+          전쟁까지 남은 블록 : {(quot+1) * roundblocknum - blockinterval }
         </div>
     }
 

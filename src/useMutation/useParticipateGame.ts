@@ -9,6 +9,7 @@ import useGetNowContractInfoFromAPI from '../useQuery/serverapi/useGetNowContrac
 interface Request {
   team: string;
   amount: number;
+  latestBlock : number;
 }
 
 const useParticipateGame = (config: Config) => {
@@ -17,21 +18,9 @@ const useParticipateGame = (config: Config) => {
   const queryClient = useQueryClient();
   const {refetch : gameInfoRefetch} = useGetNowContractInfoFromAPI();
 
-
-  const [yearMonthDate, time] = config.start_time.split(' ');
-  const [year, month, date] = yearMonthDate.split('-');
-  const [hour, minute, second] = time.split(':');
-
-  const startTimedate = new Date(Date.UTC(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(date, 10), parseInt(hour, 10), parseInt(minute, 10), parseInt(second, 10)));
-
   const fetchData = async (param: Request) => {
-    const now = new Date();
-    const secDiff = ((now.getTime() - startTimedate.getTime()) / (60 * 1000));
-
-    const round_min = config.war_min + config.truce_min;
-    const nowRound = Math.floor(secDiff / (round_min)) + 1;
-
     const amount = new BigNumber(param.amount).multipliedBy(10 ** 18).toFixed(0);
+    const nowround = ((param.latestBlock - config.startblockheight) / (config.warblocknum + config.truceblocknum) ) + 1;
     if (connectedWallet) {
       const tx = await connectedWallet.post({
         msgs: [new MsgExecuteContract(
@@ -39,7 +28,7 @@ const useParticipateGame = (config: Config) => {
           contractAddress,
           {
             "participate": {
-              "round": nowRound,
+              "round": nowround,
               "team": param.team
             }
           },
@@ -48,7 +37,7 @@ const useParticipateGame = (config: Config) => {
       });
       return {
         txhash : tx?.result.txhash || '',
-        round : nowRound,
+        round : nowround,
         team : param.team,
         address : connectedWallet.walletAddress
       };

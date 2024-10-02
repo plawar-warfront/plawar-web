@@ -9,11 +9,12 @@ import useUserBalance from '../../../useQuery/lcd/useUserBalance';
 import { plawarContractOwner } from '../../../constant';
 import RegisterPrize from './RegisterPrize';
 
-const ParticipateForm = ({ config, address }: { config: Config, address?: string }) => {
+const ParticipateForm = ({ config, latestBlock, address }: { config: Config, latestBlock : number, address?: string }) => {
     const [userInput, setUserInput] = useState<{ amount: number; }>({ amount: 10 });
 
-    const warTime = getWarTime(config.war_min, config.truce_min, config.start_time);
-    const [nowWar, setNowWar] = useState(warTime < config.war_min * 60);
+    const blockinterval = latestBlock - config.startblockheight;
+    const remainder = blockinterval % (config.warblocknum + config.truceblocknum);
+    const [nowWar, setNowWar] = useState(remainder >= config.warblocknum);
 
     const [requestError, setRequestError] = useState<string | null>(null);
     const [txhash, setTxhash] = useState<string | null>(null);
@@ -24,6 +25,7 @@ const ParticipateForm = ({ config, address }: { config: Config, address?: string
     };
 
     const { mutateAsync: participateGame } = useParticipateGame(config);
+    
 
     const onButtonClick = async (e: FormEvent, team: string) => {
         e.preventDefault();
@@ -34,7 +36,8 @@ const ParticipateForm = ({ config, address }: { config: Config, address?: string
             }
             const res = await participateGame({
                 team,
-                amount
+                amount,
+                latestBlock
             });
             if (res) {
                 setTxhash(res.txhash);
@@ -59,7 +62,7 @@ const ParticipateForm = ({ config, address }: { config: Config, address?: string
             <TeamButton
                 nowWar={nowWar}
                 setNowWar={setNowWar}
-                initialSeconds={nowWar ? (config.war_min * 60 - warTime) : (config.war_min + config.truce_min) * 60 - warTime}
+                initialSeconds={nowWar ? ((config.warblocknum - remainder) * 6) : ((config.warblocknum + config.truceblocknum - remainder) * 6)}
                 team={"blue"}
                 onButtonClick={onButtonClick}
             />
@@ -81,7 +84,7 @@ const ParticipateForm = ({ config, address }: { config: Config, address?: string
             <TeamButton
                 nowWar={nowWar}
                 setNowWar={setNowWar}
-                initialSeconds={nowWar ? (config.war_min * 60 - warTime) : (config.war_min + config.truce_min) * 60 - warTime}
+                initialSeconds={nowWar ?((config.warblocknum - remainder) * 6) : ((config.warblocknum + config.truceblocknum - remainder) * 6)}
                 team={"red"}
                 onButtonClick={onButtonClick}
             />

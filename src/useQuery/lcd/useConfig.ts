@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from "axios";
 import { plawarContractAddress } from '../../constant';
 import { lcd } from '../../lcd';
 
@@ -13,9 +12,9 @@ export interface Config {
   owner_candidate: string;
   profit_address: string;
   profit_percent: number;
-  start_time: string;
-  truce_min: number;
-  war_min: number;
+  startblockheight: number;
+  truceblocknum: number;
+  warblocknum: number;
 }
 
 const useConfig = () => {

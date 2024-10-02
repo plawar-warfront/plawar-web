@@ -15,9 +15,12 @@ import axplaToXpla from "../../../util/axplaToXpla";
 import OptionSelector from "../../OptionSelector";
 import useShowGameType from '../../../zustand/useShowGameType';
 import UnityBuild from "./UnityBuild";
+import useLatestBlock from "../../../useQuery/lcd/useLatestBlock";
+import { Config } from "../../../useQuery/lcd/useConfig";
 
 const GameScreen = () => {
     const { data: config } = useConfig();
+    const { data : latestBlock} = useLatestBlock()
     const { status, wallets } = useWallet();
     const { data: nowGameInfo } = useGetNowContractInfoFromAPI();
     const { data: gamestate } = useGetGamestateFromAPI();
@@ -64,11 +67,14 @@ const GameScreen = () => {
         </div> <div className={clsx("flex flex-1 flex-col justify-between p-4", (showGameType === "auto" ? (nowGameInfo.now_truce ? "hidden" : "block") : (showGameType === "game"
             ? "block" : "hidden")))}>
             <OptionSelector />
-현재 라운드 : {nowGameInfo.nowround}
+현재 라운드 : {nowGameInfo.nowround} {
+    config && latestBlock && <RestBlockinfo config={config} latestBlock={parseInt(latestBlock, 10)}/>
+}
             <NavigateSubtitle nowSubtitle={nowGameInfo.now_subtitle} />
             <UnityBuild />
             {
-                config && <ParticipateForm config={config}
+                config && latestBlock && <ParticipateForm config={config} 
+                latestBlock={parseInt(latestBlock, 10)}
                     address={status === WalletStatus.WALLET_CONNECTED && wallets.length > 0 ? wallets[0].xplaAddress : undefined}
                 />
             }
@@ -81,6 +87,26 @@ const GameScreen = () => {
 }
 
 export default GameScreen
+
+const RestBlockinfo = ({ config , latestBlock} : {config : Config, latestBlock : number}) => {
+    const blockinterval = latestBlock - config.startblockheight;
+    const roundblocknum = config.warblocknum + config.truceblocknum
+    const remainder = blockinterval % roundblocknum;
+    const quot = Math.floor(blockinterval / roundblocknum);
+    const nowWar = remainder < config.warblocknum;
+    return <span>
+        현재 최신 블록 : {latestBlock} /
+    {
+      nowWar ?
+        <span>
+          휴전까지 남은 블록 : {(quot) * roundblocknum  + config.warblocknum - blockinterval }
+        </span>
+        :
+        <span>
+          전쟁까지 남은 블록 : {(quot+1) * roundblocknum - blockinterval }
+        </span>
+    }</span>
+}
 
 const Roundinfo = ({ nowGameInfo }: { nowGameInfo: NowGameInfo }) => {
     const { data: roundinfo } = useGetRoundInfoFromAPI(nowGameInfo.nowround);
