@@ -8,6 +8,7 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { ToastContainer, toast } from 'react-toastify';
 import ChatList from './ChatList';
+import 'react-toastify/dist/ReactToastify.css';
 
 export interface ChatMessage {
   address: string;
@@ -19,6 +20,7 @@ const PAGE_SIZE = 20
 
 const Chat: React.FC = () => {
   const [state, setState] = useState<{ message: string; }>({ message: '' });
+  const [initScroll, setInitScroll] = useState(true);
 
   const { wallets } = useWallet();
   const queryClient = useQueryClient();
@@ -26,23 +28,14 @@ const Chat: React.FC = () => {
 
   const baseurl = process.env.REACT_APP_ENV !== "development" ? `${process.env.REACT_APP_API_URL || ''}/discord` : 'http://localhost:5642';
   const fetcher = async ({ pageParam = 1 }) => {
-    console.log(pageParam);
     const response = await axios.get<{status : string; message : string | null, data : ChatMessage[]}>(`${baseurl}/api/chathistory?perPage=${PAGE_SIZE}&page=${pageParam}`);
-    if (pageParam === 1) {
-      setTimeout(() => {
-        scrollbarRef.current?.scrollToBottom();
-      }, 100);
-    }
     return response.data.data;
   }
 
   const {
     data: chatData,
     fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isLoading,
-    refetch
+    refetch,
   } = useInfiniteQuery(
     {
       queryKey: ['chathistory'],
@@ -63,6 +56,7 @@ const Chat: React.FC = () => {
       // refetchOnWindowFocus : false
     }
   );
+
   const isEmpty = chatData?.pages?.length === 0;
   const isReachingEnd = isEmpty || (chatData && chatData.pages[chatData.pages.length - 1]?.length < PAGE_SIZE);
 
@@ -80,20 +74,16 @@ const Chat: React.FC = () => {
 
   const onMessage = useCallback(
     (data: ChatMessage) => {
-      console.log(data, "OnMessage")
       refetch();
 
       if (scrollbarRef.current) {
         if (
           scrollbarRef.current.getScrollHeight() <
           scrollbarRef.current.getClientHeight() + scrollbarRef.current.getScrollTop() + 150
-        ) {
-          console.log(1);
-          setTimeout(() => {
-            scrollbarRef.current?.scrollToBottom();
-          }, 100);
+        ) // 스크롤이 바닥에 있는가? 
+        {
+
         } else {
-          console.log(2);
           if (wallets && wallets.length > 0 && data.address !== wallets[0].xplaAddress) {
             toast.success('새 메시지가 도착했습니다.', {
               onClick() {
@@ -110,18 +100,10 @@ const Chat: React.FC = () => {
 
 
   useEffect(() => {
-    // socket.emit('get chat history');
-
-    // const onChatHistory = (history: ChatMessage[]) => {
-    //   setChat(history);
-    // }
-
     socket.on('message', onMessage);
-    // socket.on('chat history', onChatHistory);
 
     return () => {
       socket.off('message', onMessage);
-      // socket.off('chat history', onChatHistory);
     }
 
   }, []);
@@ -131,10 +113,13 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full justify-between mr-4 py-8 w-full">
+    <div className="flex flex-col h-full justify-between mr-4 py-8 w-full relative">
+      <ToastContainer position="bottom-right" />
+
       <h1>채팅 목록</h1>
-      {/* <RenderChat chat={chat}  userAddress={wallets[0].xplaAddress}/> */}
       <ChatList
+      initScroll={initScroll}
+      setInitScroll={setInitScroll}
         scrollbarRef={scrollbarRef}
         isReachingEnd={isReachingEnd}
         isEmpty={isEmpty}
@@ -142,8 +127,6 @@ const Chat: React.FC = () => {
         fetchNextPage={fetchNextPage}
         userAddress={wallets[0].xplaAddress}
       />
-      <ToastContainer position="bottom-right" />
-      {/* <MyComponent /> */}
       <form onSubmit={onMessageSubmit} className="w-full">
         <h1>채팅</h1>
         <div className="flex gap-2 w-full justify-between">
