@@ -13,11 +13,12 @@ interface Props {
     fetchNextPage: () => Promise<any>;
     userAddress: string;
 }
-const RenderChat: FC<Props> = ({ scrollbarRef, isReachingEnd, isEmpty, chatData, fetchNextPage, userAddress }) => {
+const ChatList: FC<Props> = ({ scrollbarRef, isReachingEnd, isEmpty, chatData, fetchNextPage, userAddress }) => {
     const [scrollHeight, setScrollHeight] = useState<number>()
     const onScroll = useCallback(
         (values: positionValues) => {
             if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
+                console.log('fetchnextpage');
                 fetchNextPage();
                 console.log(values);
             }
@@ -49,7 +50,7 @@ const RenderChat: FC<Props> = ({ scrollbarRef, isReachingEnd, isEmpty, chatData,
     </div>
 }
 
-export default RenderChat;
+export default ChatList;
 
 const ChatData = ({ chatmessages, userAddress }: { chatmessages: ChatMessage[][], userAddress: string }) => {
     return <>
@@ -74,7 +75,7 @@ const ChatPage = ({ resultArray, userAddress }: { resultArray: ChatMessage[], us
                     <div className={`max-w-xs p-2 rounded-lg ${address === userAddress ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}>
                         <p className="font-bold">{truncate(address, [5, 3])}</p>
                         <p>{message}</p>
-                        <p>{dayjs(now).format('YYYY-MM-DD') === dayjs(timestamp).format('YYYY-MM-DD') ? dayjs(timestamp).format('HH:mm:ss'): dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss')}</p>
+                        <p>{dayjs(now).format('YYYY-MM-DD') === dayjs(timestamp).format('YYYY-MM-DD') ? dayjs(timestamp).format('HH:mm:ss'): dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss')}(UTC)</p>
                     </div>
                 </div>
             ))

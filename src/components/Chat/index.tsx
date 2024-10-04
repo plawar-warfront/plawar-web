@@ -26,13 +26,14 @@ const Chat: React.FC = () => {
 
   const baseurl = process.env.REACT_APP_ENV !== "development" ? `${process.env.REACT_APP_API_URL || ''}/discord` : 'http://localhost:5642';
   const fetcher = async ({ pageParam = 1 }) => {
-    const response = await axios.get<ChatMessage[]>(`${baseurl}/api/chathistory?perPage=${PAGE_SIZE}&page=${pageParam}`);
+    console.log(pageParam);
+    const response = await axios.get<{status : string; message : string | null, data : ChatMessage[]}>(`${baseurl}/api/chathistory?perPage=${PAGE_SIZE}&page=${pageParam}`);
     if (pageParam === 1) {
       setTimeout(() => {
         scrollbarRef.current?.scrollToBottom();
       }, 100);
     }
-    return response.data;
+    return response.data.data;
   }
 
   const {
@@ -59,33 +60,28 @@ const Chat: React.FC = () => {
         }
         return firstPageParam - 1
       },
+      // refetchOnWindowFocus : false
     }
   );
   const isEmpty = chatData?.pages?.length === 0;
   const isReachingEnd = isEmpty || (chatData && chatData.pages[chatData.pages.length - 1]?.length < PAGE_SIZE);
 
-  const onMessageSubmit = useCallback((e: FormEvent) => {
+  const onMessageSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
     const { message } = state;
 
-    axios.post(`${baseurl}/api/userchat`, {
+    await axios.post(`${baseurl}/api/userchat`, {
       "address": wallets[0].xplaAddress,
       "message": message
     })
-      .then(() => {
-        scrollbarRef.current?.scrollToBottom();
-      })
-      .catch(console.error);
 
     setState({ message: '' });
   }, [baseurl, queryClient, state, wallets]);
 
   const onMessage = useCallback(
     (data: ChatMessage) => {
-      queryClient.setQueryData(['chathistory'], (oldData: any) => ({
-        pages: [[data], ...oldData.pages],
-        pageParams: [0, ...oldData.pageParams]
-      }));
+      console.log(data, "OnMessage")
+      refetch();
 
       if (scrollbarRef.current) {
         if (
