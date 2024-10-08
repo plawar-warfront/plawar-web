@@ -1,6 +1,7 @@
 import {
   Connection,
   ConnectType,
+  useConnectedWallet,
   useWallet,
   WalletStatus,
 } from "@xpla/wallet-provider";
@@ -9,36 +10,28 @@ import { CircularProgress, useMediaQuery } from "@mui/material";
 import { selectConnection } from "./ConnectModal";
 import { truncate } from "@xpla.kitchen/utils";
 import "../../App.css";
+import { Extension } from "@xpla/xpla.js";
+import useLoginSession from "../../zustand/useLoginSession";
+import { getBaseurl } from "../../util/getBaseurl";
+import axios from "axios";
 
 let timerId: any = undefined;
 
 export default function Connect() {
-  const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const {loginSession, setLoginSession} = useLoginSession();
 
   const wallet =
     useWallet();
-  const { status, availableConnections, connect, disconnect, wallets, refetchStates } = wallet;
+  const { status, availableConnections, connect, disconnect, wallets, recheckStatus} = wallet;
   const isDesktop = useMediaQuery("(min-width:768px)");
-
-  useEffect(() => {
-    if (wallet) {
-      if (timerId) {
-        clearInterval(timerId)
-      }
-
-      timerId = setInterval(async () => {
-        await refetchStates();
-      }, 1000);
-    }
-  }, [wallet]);
+  const connectedWallet = useConnectedWallet();
 
   const clickConnect = async () => {
     try {
       const available: Connection[] = availableConnections.filter(
         (connection) =>
-          connection.type === ConnectType.EXTENSION ||
-          connection.type === ConnectType.WALLETCONNECT
+          connection.type === ConnectType.EXTENSION
       );
 
       available.map((a) => {
@@ -88,13 +81,7 @@ export default function Connect() {
               name: "XPLA Vault Wallet",
               icon: "https://assets.xpla.io/icon/extension/icon.png",
               identifier: undefined,
-            } as Connection,
-            {
-              type: "WALLETCONNECT",
-              name: "XPLA GAMES Wallet",
-              icon: "https://xpla.events/img/xplagames.svg",
-              identifier: "xplagames",
-            } as Connection,
+            } as Connection
           ]
       );
 
@@ -108,9 +95,6 @@ export default function Connect() {
           return;
         }
 
-        if (isDesktop && type !== ConnectType.WALLETCONNECT) {
-          setLoginLoading(true);
-        }
         if (identifier === "xplagames") {
           await connect(type, undefined, true);
         } else {
@@ -120,18 +104,22 @@ export default function Connect() {
     } catch (e) { }
   };
 
+
+  const walletDisconnect = () => {
+    disconnect();
+    setLoginSession(undefined);
+  }
+
   useEffect(() => {
-    if (loginLoading) {
-      const timer = setTimeout(() => {
-        if (status !== WalletStatus.WALLET_CONNECTED) {
-          window.location.reload();
-        }
-      }, 3000);
-      return () => {
-        clearTimeout(timer);
-      };
+    if (connectedWallet) {
+      connectedWallet.signBytes(Buffer.from("ChatPostSignMessage")).then((signresult) => {
+        setLoginSession(signresult);
+        console.log(signresult)
+      }).catch((e) => {
+        walletDisconnect()
+      })
     }
-  }, [loginLoading, status]);
+  }, [connectedWallet])
 
   const handleBlurContainer = () => {
     setTimeout(() => {
@@ -163,8 +151,7 @@ export default function Connect() {
               <div
                 className="font-pretendard border-solid border-[1px] border-[#000080] text-[#000080] md:px-[28px] px-[4px] py-[8px] font-medium md:text-[22px] text-[19px] md:leading-[26px] leading-[22px] rounded-[8px] hover:cursor-pointer mt-[10px]"
                 onClick={() => {
-                  setLoginLoading(false);
-                  disconnect();
+                  walletDisconnect();
                 }}
               >
                 Disconnect Wallet
@@ -181,9 +168,6 @@ export default function Connect() {
           className="connectwalletshadow flex md:min-w-[327px] md:leading-[38px] leading-[25px] z-10 items-center justify-center gap-[10px] px-[45px] py-[10px] rounded-[100px] hover:cursor-pointer bg-gradient-to-r to-[#0080FF] from-[#00AAFF]"
         >
           Connect Wallet
-          {loginLoading && (
-            <CircularProgress size={24} style={{ color: "white" }} />
-          )}
         </button>
       )}
     </>

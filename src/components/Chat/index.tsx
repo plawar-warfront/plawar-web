@@ -9,6 +9,7 @@ import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { ToastContainer, toast } from 'react-toastify';
 import ChatList from './ChatList';
 import 'react-toastify/dist/ReactToastify.css';
+import useLoginSession from '../../zustand/useLoginSession';
 
 export interface ChatMessage {
   address: string;
@@ -21,6 +22,7 @@ const PAGE_SIZE = 20
 const Chat: React.FC = () => {
   const [state, setState] = useState<{ message: string; }>({ message: '' });
   const [initScroll, setInitScroll] = useState(true);
+  const {loginSession} = useLoginSession();
 
   const { wallets } = useWallet();
   const queryClient = useQueryClient();
@@ -65,8 +67,9 @@ const Chat: React.FC = () => {
     const { message } = state;
 
     await axios.post(`${baseurl}/api/userchat`, {
-      "address": wallets[0].xplaAddress,
-      "message": message
+      address: wallets[0].xplaAddress,
+      signbytesresult : loginSession,
+      message: message
     })
 
     setState({ message: '' });
